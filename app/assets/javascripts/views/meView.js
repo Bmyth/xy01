@@ -25,6 +25,10 @@ define(['backbone', 'text!template/meView_template.html'],function(Backbone, vie
 
     var viewName = "meView";
 
+    var title = "me";
+
+    var description = "me";
+
     var basicColor = "#E1CFFC";
 
     var initialize = function(){
@@ -46,6 +50,8 @@ define(['backbone', 'text!template/meView_template.html'],function(Backbone, vie
     return {
         initialize : initialize,
         viewName : viewName,
+        title : title,
+        desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
         renderGrandElement : renderGrandElement

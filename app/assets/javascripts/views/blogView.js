@@ -23,6 +23,10 @@ define(['backbone', 'text!template/blogView_template.html'],function(Backbone, v
 
     var viewName = "blogView";
 
+    var title = "blog";
+
+    var description = "blog";
+
     var basicColor = "#B0DCF9";
 
     var view = new BlogView;
@@ -46,6 +50,8 @@ define(['backbone', 'text!template/blogView_template.html'],function(Backbone, v
     return {
         initialize : initialize,
         viewName : viewName,
+        title : title,
+        desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
         renderGrandElement : renderGrandElement

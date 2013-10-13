@@ -25,6 +25,10 @@ define(['backbone', 'text!template/gridView_template.html'],function(Backbone, v
 
     var viewName = "gridView";
 
+    var title = "grid";
+
+    var description = "grid";
+
     var basicColor = "#FACBC0";
 
     var initialize = function(){
@@ -45,6 +49,8 @@ define(['backbone', 'text!template/gridView_template.html'],function(Backbone, v
     return {
         initialize : initialize,
         viewName : viewName,
+        title : title,
+        desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
         renderGrandElement : renderGrandElement

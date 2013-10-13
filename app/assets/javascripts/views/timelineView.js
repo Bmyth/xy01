@@ -25,6 +25,10 @@ define(['backbone', 'text!template/timelineView_template.html'],function(Backbon
 
     var viewName = "timelineView";
 
+    var title = "time line";
+
+    var description = "time line";
+
     var basicColor = "#B4D4D4";
 
     var initialize = function(){
@@ -46,6 +50,8 @@ define(['backbone', 'text!template/timelineView_template.html'],function(Backbon
     return {
         initialize : initialize,
         viewName : viewName,
+        title : title,
+        desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
         renderGrandElement : renderGrandElement
