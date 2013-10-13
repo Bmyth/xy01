@@ -3,7 +3,7 @@ $.fn.extend({
 
         var parent = $(this);
 
-        var size = 600;
+        var size = params.size || 600;
 
         var defaultShelfOffset = "300px";
         var elementNumber = getElementNumber();
@@ -32,18 +32,25 @@ $.fn.extend({
             "<p class='desc'></p>" +
             "</div>";
 
+        var grandElementTemplate = "<div class='grand-element'></div>"
+
         var shelfOffset = params.shelfOffset || defaultShelfOffset;
         var elementSmallSize = params.elementSmallSize || defaultMenuHeight;
         var grandHeight = params.grandHeight || size;
+        var homeFrontColor = params.homeFrontColor || defaultFrontColor;
+        var homeBackColor = params.homeBackColor || defaultBackColor;
         $(meepoTemplate).appendTo(parent);
 
-        $(".meepo-shelf .grand").css("width",size);
+        $(".meepo-shelf").css("width",size);
+        $(".meepo-grand").css("width",size);
+        $(".meepo-shelf .slider ").css("width", elementSize);
 
         renderShelf();
 
         var ghost = '<div class="ghost"></div>';
-        $('.main-view-element').addClass("disappeared");
+        $('.main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor}).addClass("disappeared");
         $('.shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
+        $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
 
         function renderShelf(){
             if(params.elements){
@@ -52,7 +59,6 @@ $.fn.extend({
                }
             }
         }
-
 
         shelfIndex();
         menuSlider();
@@ -104,6 +110,8 @@ $.fn.extend({
                    'color': frontColor,
                    'backgroundColor': backColor
                }).addClass("shelf-element").appendTo(shelfContainer);
+           }else if(ele.renderShelf){
+               ele.rendShelf(shelfContainer);
            }else{
                var title = ele.title || defaultTitle;
                var desc = ele.desc || defaultDesc;
@@ -155,8 +163,25 @@ $.fn.extend({
             $(".meepo-grand").find(".grand-element").remove();
             var idx = $(".shelf-element.disappeared").attr('eleIndex');
             if(params.elements){
-                if(params.elements[idx].render){
+                var ele = params.elements[idx];
+                var frontColor = ele.frontColor || defaultFrontColor;
+                var backColor = ele.backColor || defaultBackColor;
+                if(ele.grandElement){
+                    $(ele.grandElement).css({
+                        'height':grandHeight,
+                        'width':size,
+                        'color': frontColor,
+                        'backgroundColor': backColor
+                    }).addClass("grand-element").appendTo($('.meepo-grand'));
+                }else if(params.elements[idx].render){
                     params.elements[idx].render('.meepo-grand');
+                }else{
+                    $(grandElementTemplate).css({
+                        'height':grandHeight,
+                        'width':size,
+                        'color': frontColor,
+                        'backgroundColor': backColor
+                    }).appendTo($('.meepo-grand'));
                 }
             }
         };
