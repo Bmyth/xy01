@@ -215,6 +215,7 @@ $.fn.extend({
             }else if(transformMode === "switch"){
                 $('.shelf-element.disappeared').removeClass('disappeared');
                 $('.shelf-element.to-switch').removeClass("to-switch").addClass("disappeared");
+                shelfIndex();
                 renderGrand();
 
                 $('.shelf-element.disappeared .ghost').animate({'height': elementSmallSize}, 500);
