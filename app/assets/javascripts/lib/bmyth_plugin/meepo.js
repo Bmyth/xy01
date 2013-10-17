@@ -7,9 +7,10 @@ $.fn.extend({
 
         var defaultShelfOffset = "300px";
         var elementNumber = getElementNumber();
-        var elementSize = size/elementNumber * 0.8;
-        var elementMargin = size/elementNumber * 0.1;
-        var elementOffset = size/elementNumber;
+        var elementSize = size/elementNumber * 0.9;
+        var elementMargin = (size - elementNumber * elementSize) / (elementNumber - 1 ) * 0.5;
+        var elementOffset = elementSize + elementMargin * 2;
+
         var defaultFrontColor = "#ffffff";
         var defaultBackColor = "#cccccc";
         var defaultTitle = "element title";
@@ -41,15 +42,16 @@ $.fn.extend({
         var homeBackColor = params.homeBackColor || defaultBackColor;
         $(meepoTemplate).appendTo(parent);
 
-        $(".meepo-shelf").css("width",size);
+        parent.css('overflow','hidden');
+        $(".meepo-shelf").css({width : size + elementMargin * 2, 'margin-left': -(elementMargin)});
         $(".meepo-grand").css("width",size);
         $(".meepo-shelf .slider ").css("width", elementSize);
 
         renderShelf();
 
         var ghost = '<div class="ghost"></div>';
-        $('.main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor}).addClass("disappeared");
-        $('.shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
+        $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor}).addClass("disappeared");
+        $('.meepo-shelf .shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
         $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
 
         function renderShelf(){
