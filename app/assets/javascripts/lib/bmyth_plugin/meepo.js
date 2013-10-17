@@ -194,7 +194,7 @@ $.fn.extend({
 
             $(".click-to-render").addClass("click-to-switch").removeClass("click-to-render");
             $('.meepo-shelf').animate({'margin-top': '0'},'fast', pushSelectedElementDown);
-            $('.shelf-element').animate({height:elementSmallSize}, 'fast');
+            $('.meepo-shelf .shelf-element').animate({height:elementSmallSize}, 'fast');
         };
 
         function shelfBack(){

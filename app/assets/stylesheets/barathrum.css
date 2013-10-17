@@ -1,0 +1,47 @@
+.barathrum-shelf {
+    background-color: #fff;
+    width: 100%;
+    height: 20px;
+}
+.barathrum-shelf .specialty-shelf{
+    float: left;
+    width: 20px;
+    background-color: #ddd;
+}
+.barathrum-shelf .specialty-item-thumb{
+    width: 10px;
+    height: 10px;
+    float: left;
+}
+.barathrum-shelf .element-shelf{
+    float: left;
+    background-color: #B0DCF9;
+    height: 20px;
+    margin: 0 10px;
+    position: relative;
+}
+.barathrum-shelf .slider{
+    width: 60px;
+    height: 20px;
+    background-color: transparent;
+    left: 0;
+    position: absolute;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #000;
+}
+.barathrum-shelf .shelf-element{
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+}
+.barathrum-shelf .mode-switch{
+    float: right;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+}
+.barathrum-grand{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 10px 0;
+}

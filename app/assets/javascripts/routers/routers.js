@@ -7,7 +7,6 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
 
     var initialize = function(){
        var router = new AppRouter;
-       MainView.initialize();
 
        router.on('route:index', function(){
            MainView.render($('.container'));

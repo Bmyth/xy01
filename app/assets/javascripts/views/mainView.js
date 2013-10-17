@@ -6,11 +6,6 @@ define(['backbone', 'text!template/mainView_template.html', 'views/blogView', 'v
         },
         initialize: function() {
             this.template = _.template(viewTemplate);
-
-            blogView.initialize();
-            timelineView.initialize();
-            gridView.initialize();
-            meView.initialize();
             this.subViewList.push(blogView, timelineView, gridView, meView);
         },
         render: function(container) {
