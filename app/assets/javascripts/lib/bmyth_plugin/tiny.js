@@ -31,12 +31,16 @@ $.fn.extend({
 
         var listContainer = parent.find('.tiny-container .element-list').get(0) || $(gridContainerTemplate).prependTo(parent).find('.element-list').get(0);
         width += elementMargin * 2;
-        listContainer =  $(listContainer).css({width: width, height: height, 'margin-left': -elementMargin});
+        $(".tiny-container .list-container").css({height:height});
+        listContainer =  $(listContainer).css({width: width, 'margin-left': -elementMargin});
         var detailContainer = $(".tiny-container .detail-container");
 
         var overlay = parent.find('.tiny-overlay').get(0) || $(overlayTemplate).prependTo($('body')).get(0);
 
-
+        $(overlay).click(function(){
+            $(this).fadeOut();
+            detailContainer.fadeOut().empty();
+        });
 
         render();
 
@@ -64,7 +68,7 @@ $.fn.extend({
                 if(elements[idx].render){
                     var content = elements[idx].render(idx);
                     $(content).appendTo(detailContainer);
-                    detailContainer.show();
+                    detailContainer.fadeIn();
                     $(overlay).show();
                 }
             });

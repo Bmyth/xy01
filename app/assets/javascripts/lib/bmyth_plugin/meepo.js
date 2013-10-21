@@ -50,7 +50,7 @@ $.fn.extend({
         renderShelf();
 
         var ghost = '<div class="ghost"></div>';
-        $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor}).addClass("disappeared");
+        $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor, marginTop: elementMargin, marginBottom: elementMargin}).addClass("disappeared");
         $('.meepo-shelf .shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
         $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
 
@@ -212,7 +212,7 @@ $.fn.extend({
 
         function pushSelectedElementDown(){
             if(transformMode === "toGrand"){
-                $('.shelf-element.disappeared .ghost').animate({'height': elementSmallSize}, 500);
+                $('.shelf-element.disappeared .ghost').animate({'height': elementSmallSize}, 800);
                 $('.meepo-grand').animate({'height': grandHeight}, 800, pushMainElementIn);
             }else if(transformMode === "switch"){
                 $('.shelf-element.disappeared').removeClass('disappeared');
@@ -220,7 +220,7 @@ $.fn.extend({
                 shelfIndex();
                 renderGrand();
 
-                $('.shelf-element.disappeared .ghost').animate({'height': elementSmallSize}, 500);
+                $('.shelf-element.disappeared .ghost').animate({'height': elementSmallSize}, 800);
                 $('.meepo-grand').animate({'height': grandHeight}, 800, pushMainElementIn);
             }
         };
@@ -238,7 +238,7 @@ $.fn.extend({
 
         function pushMainElementIn(){
             $('.shelf-element.disappeared').animate({width: '0px', 'margin-left': '0px', 'margin-right': '0px'}, 'fast');
-            $('.shelf-element.main-view-element').animate({width: elementSize, margin:elementMargin}, 'fast');
+            $('.shelf-element.main-view-element').animate({width: elementSize, marginLeft:elementMargin, marginRight:elementMargin}, 'fast');
         };
 
         function pushMainElementOut(){

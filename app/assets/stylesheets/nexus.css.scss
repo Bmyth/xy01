@@ -8,22 +8,13 @@
   margin: 0 auto;
 }
 
-.listed-blog-item{
-  width: 240px;
-  height: 240px;
-  margin: 20px 40px 20px 0;
-  background-color: #eee;
-  position: relative;
-  float: left;
-  .specialty-flag{
-    height: 100%;
-    width: 8px;
-    position: absolute;
-    left: 0;
-  }
-  .content-container{
-    width: 100%;
-    padding: 0 10px;
+.blog-content{
+  padding: 3px;
+  .blog-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
   }
 }
 
