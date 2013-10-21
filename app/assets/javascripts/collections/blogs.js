@@ -16,13 +16,13 @@ define(['backbone', 'models/blog'], function(Backbone, Blog){
         Blogs.fetch();
         if(Blogs.length == 0){
             Blogs.add([
-                { id: 1, title: 'dummy blog1', specialty: 'prog'},
-                { id: 2, title: 'dummy blog2', specialty: 'prog'},
-                { id: 3, title: 'dummy blog3', specialty: 'idea'},
-                { id: 4, title: 'dummy blog4', specialty: 'prog'},
-                { id: 5, title: 'dummy blog5', specialty: 'life'},
-                { id: 6, title: 'dummy blog6', specialty: 'idea'},
-                { id: 7, title: 'dummy blog7', specialty: 'prog'}
+                { id: 1, title: 'dummy blog1', specialty: 'prog', thumbnail:'assets/blog_thumb/image0.jpg', createTime: "13-08"},
+                { id: 2, title: 'dummy blog2', specialty: 'prog', thumbnail:'assets/blog_thumb/image1.jpg', createTime: "13-08"},
+                { id: 3, title: 'dummy blog3', specialty: 'idea', thumbnail:'assets/blog_thumb/image2.jpg', createTime: "13-09"},
+                { id: 4, title: 'dummy blog4', specialty: 'prog', thumbnail:'assets/blog_thumb/image3.jpg', createTime: "13-10"},
+                { id: 5, title: 'dummy blog5', specialty: 'life', thumbnail:'assets/blog_thumb/image4.jpg', createTime: "13-10"},
+                { id: 6, title: 'dummy blog6', specialty: 'idea', thumbnail:'assets/blog_thumb/image5.jpg', createTime: "13-10"},
+                { id: 7, title: 'dummy blog7', specialty: 'prog', thumbnail:'assets/blog_thumb/image6.jpg', createTime: "13-10"}
             ]);
         }
     };

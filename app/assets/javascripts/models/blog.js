@@ -1,7 +1,7 @@
 define(['backbone'], function(Backbone){
     var Blog = Backbone.Model.extend({
         title : "",
-        banner: "",
+        thumbnail: "",
         desc: "",
         content : "",
         id: "",

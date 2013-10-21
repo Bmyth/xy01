@@ -15,7 +15,7 @@ $.fn.extend({
         var defaultBackColor = "#cccccc";
         var defaultTitle = "element title";
         var defaultDesc = "element description";
-        var defaultMenuHeight = 40;
+        var defaultMenuHeight = 20;
 
 	    var meepoTemplate = "<div class='meepo-shelf'>" +
                         "<div class='slider'></div>" +

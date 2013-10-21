@@ -12,7 +12,7 @@ define(['backbone', 'text!template/mainView_template.html', 'views/blogView', 'v
             var content =  this.template;
             $(container).append(content);
 
-            $('.navigation-bar').meepo({
+            $('.content-panel').meepo({
                 elements:[
                             {title:blogView.title, desc:blogView.desc, frontColor: "#ffffff", backColor: blogView.basicColor, render: blogView.renderGrandElement},
                             {title:timelineView.title, desc:timelineView.desc, frontColor: "#ffffff", backColor: timelineView.basicColor, render: timelineView.renderGrandElement},

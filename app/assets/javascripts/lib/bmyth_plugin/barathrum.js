@@ -58,6 +58,8 @@ $.fn.extend({
                 var scrollTop = ui.position.left/ shelfLength * scrollHeight;
                 $(".barathrum-grand").animate({scrollTop:scrollTop},'fast');
             }
+
+            $('.barathrum-shelf').hide();
         };
         function renderGrand(){
             $(grandTemplate).css({width:size, height: grandHeight}).insertAfter($('.barathrum-shelf'));
@@ -65,11 +67,11 @@ $.fn.extend({
             var sub = elements;
             for(var i = 0; i < sub.length; i++){
                 if(sub[i].render){
-                    sub[i].render(i).addClass('barathrum-grand-item').attr('barathrumIdx', i).css({width:'100%'}).appendTo($('.barathrum-grand'));
+                    sub[i].render(i).addClass('barathrum-grand-item').attr('barathrumIdx', i).appendTo($('.barathrum-grand'));
                 }
             }
 
-            $('.barathrum-grand').scroll(grandScroll);
+//            $('.barathrum-grand').scroll(grandScroll);
 
             function grandScroll(){
                 var scrollHeight = $(".barathrum-grand").get(0).scrollHeight;

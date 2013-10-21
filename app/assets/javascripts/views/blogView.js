@@ -15,18 +15,25 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
             var that = this;
             Blogs.blogList.each(function(blog){
                 var color = Blogs.getSpecialty(blog.get('specialty')).color;
-                that.blogList.push({color: color, render: $.proxy(that.renderInGrandList, that), id:blog.get('id')});
+                that.blogList.push({
+                    title: blog.get('title'),
+                    color: color,
+                    render: $.proxy(that.renderInDetail, that),
+                    thumbnail: blog.get('thumbnail'),
+                    date: blog.get('createTime'),
+                    id: blog.get('id')
+                });
             });
         },
-        renderInGrandList : function(idx){
+        renderInDetail : function(idx){
             var element = this.blogList[idx];
             var id = element.id;
             var blog = Blogs.blogList.get(id);
             var color = element.color;
             var title = blog.get('title');
-            var content = $(this.template()).children(".listed-blog-item");
-            content.find('.specialty-flag').css({backgroundColor:color});
-            content.find('.title').text(title);
+            var content = $(this.template()).children(".blog-content");
+            content.find('.blog-title').text(title);
+            content.find('.blog-content').text("content");
             return content
         },
         renderShelfElement : function(container) {
@@ -35,7 +42,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
         },
         renderBlog : function(container){
             $(this.template()).children(".grand-element").attr('viewName', viewName).css({backgroundColor:'#fff'}).appendTo(container);
-            $('.blog-grand-element').barathrum({specialtyList: Blogs.specialtyList ,elements: this.blogList, size: 600});
+            $('.blog-grand-element').tiny({specialtyList: Blogs.specialtyList ,elements: this.blogList});
         }
     });
 
