@@ -29,7 +29,7 @@ define(['backbone', 'text!template/gridView_template.html'],function(Backbone, v
 
     var description = "grid";
 
-    var basicColor = "#FACBC0";
+    var basicColor = "#FF9540";
 
     var initialize = function(){
         view.initialize();

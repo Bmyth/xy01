@@ -29,7 +29,7 @@ define(['backbone', 'text!template/timelineView_template.html'],function(Backbon
 
     var description = "time line";
 
-    var basicColor = "#B4D4D4";
+    var basicColor = "#5DCEC6";
 
     var initialize = function(){
         view.initialize();

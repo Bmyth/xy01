@@ -1,0 +1,30 @@
+.tristram-container{
+    overflow: hidden;
+    position: absolute;
+}
+.tristram-container .tri-login{
+    float: left;
+    width: 185px;
+    height: 185px;
+    color: #ccc;
+    cursor: pointer;
+    text-align: right;
+    margin-top: 5px;
+}
+.tristram-container .tri-element{
+    border-radius: 100%;
+    background-color: #ccc;
+    cursor: pointer;
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin: 5px 0px 5px 15px;
+    position: relative;
+}
+.tristram-container .tri-element img{
+    position: absolute;
+    width: 30px;
+}
+.tristram-container .tri-element.actived{
+    background-color: darkblue;
+}

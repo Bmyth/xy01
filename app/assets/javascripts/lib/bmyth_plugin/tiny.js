@@ -52,11 +52,11 @@ $.fn.extend({
                 var color = elements[i].color || "#000";
                 var date  = elements[i].date || dateIdx;
 
-                if(date !== dateIdx){
-                    dateIdx = date;
-                    var dateElement = $(dateTemplate).appendTo(listContainer);
-                    dateElement.find('p').text(dateIdx);
-                }
+//                if(date !== dateIdx){
+//                    dateIdx = date;
+//                    var dateElement = $(dateTemplate).appendTo(listContainer);
+//                    dateElement.find('p').text(dateIdx);
+//                }
 
                 var ele = $(elementTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', i).appendTo(listContainer);
                 ele.find('.thumbnail').css({maxWidth:elementWidth, maxHeight:elementHeight}).attr('src', thumbnail);

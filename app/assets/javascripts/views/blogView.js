@@ -42,7 +42,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
         },
         renderBlog : function(container){
             $(this.template()).children(".grand-element").attr('viewName', viewName).css({backgroundColor:'#fff'}).appendTo(container);
-            $('.blog-grand-element').tiny({specialtyList: Blogs.specialtyList ,elements: this.blogList});
+            $('.blog-grand-element').tiny({specialtyList: Blogs.specialtyList ,elements: this.blogList, width: 800, height: 600, elementWidth: 185, elementHeight: 185});
         }
     });
 
@@ -52,7 +52,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
 
     var description = "blog";
 
-    var basicColor = "#B0DCF9";
+    var basicColor = "#FFE873";
 
     var view = new BlogView;
 

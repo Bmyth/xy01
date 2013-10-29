@@ -4,11 +4,14 @@ $.fn.extend({
         var parent = $(this);
 
         var size = params.size || 600;
+        var grandWidth = params.grandWidth || size;
+        var grandHeight = params.grandHeight || size;
 
-        var defaultShelfOffset = "300px";
+
+        var defaultShelfOffset = 300;
         var elementNumber = getElementNumber();
-        var elementSize = size/elementNumber * 0.9;
-        var elementMargin = (size - elementNumber * elementSize) / (elementNumber - 1 ) * 0.5;
+        var elementSize = params.elementSize || size/elementNumber * 0.9;
+        var elementMargin = params.elementMargin || (size - elementNumber * elementSize) / (elementNumber - 1 ) * 0.5;
         var elementOffset = elementSize + elementMargin * 2;
 
         var defaultFrontColor = "#ffffff";
@@ -19,7 +22,7 @@ $.fn.extend({
 
 	    var meepoTemplate = "<div class='meepo-shelf'>" +
                         "<div class='slider'></div>" +
-                            "<div class='main-view-element shelf-element'>" +
+                            "<div class='main-view-element shelf-element' href='#home'>" +
                                 "<span>home</span>" +
                                 "<p class='desc'>home</p>" +
                             "</div>" +
@@ -37,14 +40,13 @@ $.fn.extend({
 
         var shelfOffset = params.shelfOffset || defaultShelfOffset;
         var elementSmallSize = params.elementSmallSize || defaultMenuHeight;
-        var grandHeight = params.grandHeight || size;
         var homeFrontColor = params.homeFrontColor || defaultFrontColor;
         var homeBackColor = params.homeBackColor || defaultBackColor;
         $(meepoTemplate).appendTo(parent);
 
         parent.css('overflow','hidden');
-        $(".meepo-shelf").css({width : size + elementMargin * 2, 'margin-left': -(elementMargin)});
-        $(".meepo-grand").css("width",size);
+        $(".meepo-shelf").css({width : size + elementMargin * 2, marginTop: shelfOffset,'margin-left': -(elementMargin)});
+        $(".meepo-grand").css({width : grandWidth});
         $(".meepo-shelf .slider ").css("width", elementSize);
 
         renderShelf();
@@ -100,10 +102,11 @@ $.fn.extend({
         }
 
         function renderShelfElement(ele, idx){
-           var frontColor = ele.frontColor || defaultFrontColor;
-           var backColor = ele.backColor || defaultBackColor;
-           var shelfContainer = parent.find('.meepo-shelf');
-           if(ele.shelfElement){
+            var frontColor = ele.frontColor || defaultFrontColor;
+            var backColor = ele.backColor || defaultBackColor;
+            var shelfContainer = parent.find('.meepo-shelf');
+            var href = "/#" + ele.title || defaultTitle;
+            if(ele.shelfElement){
                $(ele.shelfElement).css({
                    'float':'left',
                    'height':elementSize,
@@ -111,9 +114,9 @@ $.fn.extend({
                    'margin':elementMargin,
                    'color': frontColor,
                    'backgroundColor': backColor
-               }).addClass("shelf-element").appendTo(shelfContainer);
+               }).addClass("shelf-element").attr('href',href).appendTo(shelfContainer);
            }else if(ele.renderShelf){
-               ele.rendShelf(shelfContainer);
+               $(ele.rendShelf()).attr('href',href);
            }else{
                var title = ele.title || defaultTitle;
                var desc = ele.desc || defaultDesc;
@@ -124,7 +127,7 @@ $.fn.extend({
                    'margin':elementMargin,
                    'color': frontColor,
                    'backgroundColor': backColor
-               }).attr('eleIndex',idx);
+               }).attr('eleIndex',idx).attr('href',href);
                element.children('span').text(title);
                element.children('.desc').text(desc);
                element.appendTo(shelfContainer);
@@ -171,7 +174,7 @@ $.fn.extend({
                 if(ele.grandElement){
                     $(ele.grandElement).css({
                         'height':grandHeight,
-                        'width':size,
+                        'width':grandWidth,
                         'color': frontColor,
                         'backgroundColor': backColor
                     }).addClass("grand-element").appendTo($('.meepo-grand'));
@@ -180,7 +183,7 @@ $.fn.extend({
                 }else{
                     $(grandElementTemplate).css({
                         'height':grandHeight,
-                        'width':size,
+                        'width':grandWidth,
                         'color': frontColor,
                         'backgroundColor': backColor
                     }).appendTo($('.meepo-grand'));
@@ -247,3 +250,16 @@ $.fn.extend({
         };
 	}
 });
+
+$.extend({
+    meepoJump : function(section){
+        if($(".meepo-shelf").get(0) && $(".meepo-grand").get(0)){
+            $(".meepo-shelf .shelf-element").each(function(){
+                if($(this).find("span").text() === section){
+                    $(this).click();
+                    return false;
+                }
+            });
+        }
+    }
+})
