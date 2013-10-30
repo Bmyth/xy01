@@ -1,7 +1,7 @@
 $.fn.extend({
 	meepo: function(params){
-
         var parent = $(this);
+        var transformMode = "";
 
         var size = params.size || 600;
         var grandWidth = params.grandWidth || size;
@@ -20,15 +20,15 @@ $.fn.extend({
         var defaultDesc = "element description";
         var defaultMenuHeight = 20;
 
-	    var meepoTemplate = "<div class='meepo-shelf'>" +
-                        "<div class='slider'></div>" +
-                            "<div class='main-view-element shelf-element' href='#home'>" +
-                                "<span>home</span>" +
-                                "<p class='desc'>home</p>" +
-                            "</div>" +
-                        "</div>" +
-                    "<p class='meepo-desc'></p>" +
-                    "<div class='meepo-grand'></div>";
+        var meepoTemplate = "<div class='meepo-shelf'>" +
+            "<div class='slider'></div>" +
+            "<div class='main-view-element shelf-element' href='#home'>" +
+            "<span>home</span>" +
+            "<p class='desc'>home</p>" +
+            "</div>" +
+            "</div>" +
+            "<p class='meepo-desc'></p>" +
+            "<div class='meepo-grand'></div>";
 
 
         var shelfElementTemplate = "<div class='shelf-element'>" +
@@ -42,34 +42,45 @@ $.fn.extend({
         var elementSmallSize = params.elementSmallSize || defaultMenuHeight;
         var homeFrontColor = params.homeFrontColor || defaultFrontColor;
         var homeBackColor = params.homeBackColor || defaultBackColor;
-        $(meepoTemplate).appendTo(parent);
 
-        parent.css('overflow','hidden');
-        $(".meepo-shelf").css({width : size + elementMargin * 2, marginTop: shelfOffset,'margin-left': -(elementMargin)});
-        $(".meepo-grand").css({width : grandWidth});
-        $(".meepo-shelf .slider ").css("width", elementSize);
+        if(!rendered()){
+            render();
+        }
 
-        renderShelf();
+        if(typeof params === "string"){
+            jumpTo(params);
+        }
 
-        var ghost = '<div class="ghost"></div>';
-        $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor, marginTop: elementMargin, marginBottom: elementMargin}).addClass("disappeared");
-        $('.meepo-shelf .shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
-        $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
+        function render(){
+            $(meepoTemplate).appendTo(parent);
+
+            parent.css('overflow','hidden');
+            $(".meepo-shelf").css({width : size + elementMargin * 2, marginTop: shelfOffset,'margin-left': -(elementMargin)});
+            $(".meepo-grand").css({width : grandWidth});
+            $(".meepo-shelf .slider ").css("width", elementSize);
+
+            renderShelf();
+
+            var ghost = '<div class="ghost"></div>';
+            $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor, marginTop: elementMargin, marginBottom: elementMargin}).addClass("disappeared");
+            $('.meepo-shelf .shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
+            $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
+
+            shelfIndex();
+            menuSlider();
+
+            $('.shelf-element.click-to-render').live('click',transformToGrandView);
+            $('.shelf-element.click-to-switch').live('click',switchGrandView);
+            $('.main-view-element').click(transformToMainView);
+        };
 
         function renderShelf(){
             if(params.elements){
-               for(var i = 0; i < params.elements.length; i++){
-                   renderShelfElement(params.elements[i], i);
-               }
+                for(var i = 0; i < params.elements.length; i++){
+                    renderShelfElement(params.elements[i], i);
+                }
             }
         }
-
-        shelfIndex();
-        menuSlider();
-
-        $('.shelf-element.click-to-render').live('click',transformToGrandView);
-        $('.shelf-element.click-to-switch').live('click',switchGrandView);
-        $('.main-view-element').click(transformToMainView);
 
         function shelfIndex(){
             $('.shelf-element:not(".disappeared")').each(function(idx){
@@ -107,31 +118,31 @@ $.fn.extend({
             var shelfContainer = parent.find('.meepo-shelf');
             var href = "/#" + ele.title || defaultTitle;
             if(ele.shelfElement){
-               $(ele.shelfElement).css({
-                   'float':'left',
-                   'height':elementSize,
-                   'width':elementSize,
-                   'margin':elementMargin,
-                   'color': frontColor,
-                   'backgroundColor': backColor
-               }).addClass("shelf-element").attr('href',href).appendTo(shelfContainer);
-           }else if(ele.renderShelf){
-               $(ele.rendShelf()).attr('href',href);
-           }else{
-               var title = ele.title || defaultTitle;
-               var desc = ele.desc || defaultDesc;
-               var element = $(shelfElementTemplate).css({
-                   'float':'left',
-                   'height':elementSize,
-                   'width':elementSize,
-                   'margin':elementMargin,
-                   'color': frontColor,
-                   'backgroundColor': backColor
-               }).attr('eleIndex',idx).attr('href',href);
-               element.children('span').text(title);
-               element.children('.desc').text(desc);
-               element.appendTo(shelfContainer);
-           }
+                $(ele.shelfElement).css({
+                    'float':'left',
+                    'height':elementSize,
+                    'width':elementSize,
+                    'margin':elementMargin,
+                    'color': frontColor,
+                    'backgroundColor': backColor
+                }).addClass("shelf-element").attr('href',href).appendTo(shelfContainer);
+            }else if(ele.renderShelf){
+                $(ele.rendShelf()).attr('href',href);
+            }else{
+                var title = ele.title || defaultTitle;
+                var desc = ele.desc || defaultDesc;
+                var element = $(shelfElementTemplate).css({
+                    'float':'left',
+                    'height':elementSize,
+                    'width':elementSize,
+                    'margin':elementMargin,
+                    'color': frontColor,
+                    'backgroundColor': backColor
+                }).attr('eleIndex',idx).attr('href',href);
+                element.children('span').text(title);
+                element.children('.desc').text(desc);
+                element.appendTo(shelfContainer);
+            }
         }
 
         function getElementNumber(){
@@ -140,9 +151,7 @@ $.fn.extend({
             }
         }
 
-        var transformMode = "";
-
-       function transformToGrandView(){
+        function transformToGrandView(){
             transformMode = "toGrand";
             hideSlider();
             $(".shelf-element.disappeared").removeClass("disappeared");
@@ -211,6 +220,10 @@ $.fn.extend({
             $(".click-to-switch").addClass("click-to-render").removeClass("click-to-switch");
             $('.meepo-shelf').animate({'margin-top': shelfOffset},'fast');
             $('.shelf-element').animate({height:elementSize}, 'fast');
+
+            if(params.backHomeEvent){
+                params.backHomeEvent();
+            }
         }
 
         function pushSelectedElementDown(){
@@ -248,18 +261,28 @@ $.fn.extend({
             $('.shelf-element.disappeared').animate({width: elementSize, 'margin-left': elementMargin, 'margin-right': elementMargin}, 'fast', pushGrandElementUp);
             $('.shelf-element.main-view-element').animate({width: '0', 'margin-left': '0px', 'margin-right': '0px'}, 'fast');
         };
-	}
-});
 
-$.extend({
-    meepoJump : function(section){
-        if($(".meepo-shelf").get(0) && $(".meepo-grand").get(0)){
+
+        function jumpTo(section){
+            if(section === 'home'){
+                $('.main-view-element').click();
+                return ;
+            }
+
             $(".meepo-shelf .shelf-element").each(function(){
                 if($(this).find("span").text() === section){
                     $(this).click();
                     return false;
                 }
             });
+        };
+
+        function rendered(){
+            if($(".meepo-shelf").get(0) && $(".meepo-grand").get(0)){
+                return true;
+            }else{
+                return false;
+            }
         }
-    }
-})
+	}
+});
