@@ -207,8 +207,8 @@ $.fn.extend({
             renderGrand();
 
             $(".click-to-render").addClass("click-to-switch").removeClass("click-to-render");
-            $('.meepo-shelf').animate({'margin-top': '0'},'fast', pushSelectedElementDown);
-            $('.meepo-shelf .shelf-element').animate({height:elementSmallSize}, 'fast');
+            $('.meepo-shelf').animate({'margin-top': '0'}, 600, pushSelectedElementDown);
+            $('.meepo-shelf .shelf-element').animate({height:elementSmallSize}, 600);
         };
 
         function shelfBack(){
@@ -218,8 +218,8 @@ $.fn.extend({
             $(".meepo-grand").find(".grand-element").remove();
             $(".meepo-desc").text('').show();
             $(".click-to-switch").addClass("click-to-render").removeClass("click-to-switch");
-            $('.meepo-shelf').animate({'margin-top': shelfOffset},'fast');
-            $('.shelf-element').animate({height:elementSize}, 'fast');
+            $('.meepo-shelf').animate({'margin-top': shelfOffset},600);
+            $('.shelf-element').animate({height:elementSize}, 600);
 
             if(params.backHomeEvent){
                 params.backHomeEvent();

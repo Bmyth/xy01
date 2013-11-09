@@ -19,7 +19,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
                     title: blog.get('title'),
                     color: color,
                     render: $.proxy(that.renderInDetail, that),
-                    thumbnail: blog.get('thumbnail'),
+                    banner: blog.get('banner'),
                     date: blog.get('createTime'),
                     id: blog.get('id')
                 });
@@ -42,7 +42,15 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
         },
         renderBlog : function(container){
             $(this.template()).children(".grand-element").attr('viewName', viewName).css({backgroundColor:'#fff'}).appendTo(container);
-            $('.blog-grand-element').tiny({specialtyList: Blogs.specialtyList ,elements: this.blogList, width: 800, height: 600, elementWidth: 185, elementHeight: 185});
+            $('.blog-grand-element').tiny({
+                specialtyList: Blogs.specialtyList,
+                elements: this.blogList,
+                width: 800,
+                height: 600,
+                elementWidth: 185,
+                elementHeight: 185,
+                create: Blogs.create,
+                login:login});
         }
     });
 
@@ -55,6 +63,8 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
     var basicColor = "#FFE873";
 
     var view = new BlogView;
+
+    var login = true;
 
     var initialize = function(){
         view.initialize();
@@ -70,7 +80,11 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
 
     var renderGrandElement = function(container){
         view.renderBlog(container);
-    }
+    };
+
+    var login = function(flag){
+        login = flag;
+    };
 
     return {
         initialize : initialize,
@@ -79,6 +93,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
         desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
-        renderGrandElement : renderGrandElement
+        renderGrandElement : renderGrandElement,
+        login : login
     };
 })

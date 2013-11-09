@@ -24,7 +24,7 @@ define(['backbone', 'text!template/mainView_template.html', 'views/blogView', 'v
                     ], backHomeEvent: backHome
                 });
 
-                $('.login').tristram();
+                $('.login').tristram({loginSuccess:loginSuccess});
             }
 
             $(".login").hide();
@@ -41,6 +41,10 @@ define(['backbone', 'text!template/mainView_template.html', 'views/blogView', 'v
                 this.status = 'home';
                 $(".login").show();
                 history.pushState({},'home','/');
+            };
+
+            function loginSuccess(){
+                blogView.login(true);
             };
 
             function renderBlog(container){

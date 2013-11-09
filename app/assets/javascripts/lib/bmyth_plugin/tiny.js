@@ -23,6 +23,26 @@ $.fn.extend({
                                 "<p class='desc'>" +
                                 "</p>" +
                               "</div>";
+        var addonTemplate = "<div class='tiny-element addon'>" +
+            "<p class='cb cb1'>" +
+            "<p class='cb cb2'>" +
+            "<p class='cb cb3'>" +
+            "<p class='cb cb4'>" +
+            "</div>";
+        var editForm = "<form class='tiny-edit-form'>" +
+                        "<div class='tiny-edit-panel'>" +
+                            "<input class='title'>" +
+                            "<div class='banner'>" +
+                                "<img src='assets/tiny/bannerUp.jpg'>" +
+                                "<input type='file'>" +
+                            "</div>" +
+                            "<p class='opt'>" +
+                                "<a class='ok' href='#'>Ok</a>" + "/" +
+                                "<a class='cancel' href='#'>Cancel</a>" +
+                            "</p>" +
+                        "</div>" +
+                        "<textarea name='content' style='width:796px;height:560px;'></textarea>" +
+                       "</form>";
         var dateTemplate = "<div class='date-divider'>" +
                                 "<p></p>" +
                            "</div>";
@@ -45,25 +65,21 @@ $.fn.extend({
         render();
 
         function render(){
-            var dateIdx = "99-99";
-            for(var i = 0 ; i < elements.length; i++){
-                var thumbnail = elements[i].thumbnail || defaultThumbnail;
-                var desc = elements[i].title || "tiny element " + i;
-                var color = elements[i].color || "#000";
-                var date  = elements[i].date || dateIdx;
+            if(params.login){
+                var addon = $(addonTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', -1).appendTo(listContainer);
+                addon.find('.thumbnail').css({width:elementWidth, height:elementHeight}).attr('src', 'assets/tiny/add.png');
+            }
 
-//                if(date !== dateIdx){
-//                    dateIdx = date;
-//                    var dateElement = $(dateTemplate).appendTo(listContainer);
-//                    dateElement.find('p').text(dateIdx);
-//                }
+            for(var i = 0 ; i < elements.length; i++){
+                var thumbnail = elements[i].banner || defaultThumbnail;
+                var desc = elements[i].title || "tiny element " + i;
 
                 var ele = $(elementTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', i).appendTo(listContainer);
                 ele.find('.thumbnail').css({maxWidth:elementWidth, maxHeight:elementHeight}).attr('src', thumbnail);
                 ele.find('.desc').text(desc);
             }
 
-            $(".tiny-container .tiny-element").click(function(){
+            $(".tiny-container .tiny-element:not('.addon')").live('click',function(){
                 var idx = $(this).attr('elementId');
                 if(elements[idx].render){
                     var content = elements[idx].render(idx);
@@ -72,6 +88,33 @@ $.fn.extend({
                     $(overlay).show();
                 }
             });
+
+            $(".tiny-element.addon").live('click', function(){
+                $(editForm).appendTo(detailContainer);
+                KindEditor.create('textarea[name="content"]');
+                detailContainer.fadeIn();
+                $(overlay).show();
+            });
+
+            $(".tiny-edit-panel .banner img").live('click', function(){
+                $(".tiny-edit-panel .banner input").click();
+            });
+
+            $(".tiny-edit-panel .opt .cancel").live('click', function(){
+                $(overlay).click();
+            });
+
+            $(".tiny-edit-panel .opt .ok").live('click', function(){
+                var blogData = {};
+                blogData.title = $('.tiny-edit-panel .title').val();
+                blogData.bannerUrl = $('.tiny-edit-panel .banner input').val();
+                blogData.content = $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html();
+                params.create(blogData, createSuccess);
+            });
+
+            function createSuccess(){
+                alert('s');
+            };
         };
 	}
 });

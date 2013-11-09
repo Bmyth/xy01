@@ -60,6 +60,11 @@ $.fn.extend({
                 open = true;
                 $(".tri-login").text("open");
                 $.cookie('logged-in','yes');
+
+                if(params.loginSuccess){
+                    params.loginSuccess();
+                }
+
                 tristram.animate({top: -84});
 
             }else{
