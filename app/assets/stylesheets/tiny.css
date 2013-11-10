@@ -84,16 +84,21 @@
     margin-right: 18px;
 }
 .tiny-edit-panel .banner{
-    height: 28px;
-    width: 28px;
+    height: 30px;
+    width: 120px;
     overflow: hidden;
     float: left;
     position: relative;
 }
+.tiny-edit-panel .banner p{
+    float: right;
+    color: #ccc;
+}
 .tiny-edit-panel .banner img{
+    border: 1px solid #aaa;
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     top:0;
     left: 0;
     cursor: pointer;

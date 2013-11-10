@@ -33,8 +33,8 @@ $.fn.extend({
                         "<div class='tiny-edit-panel'>" +
                             "<input class='title'>" +
                             "<div class='banner'>" +
-                                "<img src='assets/tiny/bannerUp.jpg'>" +
-                                "<input type='file'>" +
+                                "<img src='assets/tiny/banner.png'>" +
+                                "<p></p>" +
                             "</div>" +
                             "<p class='opt'>" +
                                 "<a class='ok' href='#'>Ok</a>" + "/" +
@@ -43,9 +43,6 @@ $.fn.extend({
                         "</div>" +
                         "<textarea name='content' style='width:796px;height:560px;'></textarea>" +
                        "</form>";
-        var dateTemplate = "<div class='date-divider'>" +
-                                "<p></p>" +
-                           "</div>";
 
         var overlayTemplate = "<div class='tiny-overlay'></div>";
 
@@ -63,8 +60,10 @@ $.fn.extend({
         });
 
         render();
+        bind();
 
         function render(){
+            listContainer.empty();
             if(params.login){
                 var addon = $(addonTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', -1).appendTo(listContainer);
                 addon.find('.thumbnail').css({width:elementWidth, height:elementHeight}).attr('src', 'assets/tiny/add.png');
@@ -78,7 +77,10 @@ $.fn.extend({
                 ele.find('.thumbnail').css({maxWidth:elementWidth, maxHeight:elementHeight}).attr('src', thumbnail);
                 ele.find('.desc').text(desc);
             }
+        };
 
+        function bind(){
+            var that = this;
             $(".tiny-container .tiny-element:not('.addon')").live('click',function(){
                 var idx = $(this).attr('elementId');
                 if(elements[idx].render){
@@ -97,7 +99,17 @@ $.fn.extend({
             });
 
             $(".tiny-edit-panel .banner img").live('click', function(){
-                $(".tiny-edit-panel .banner input").click();
+                $(".blog-form .img-form #img_imgSrc").click();
+            });
+
+
+            $(".blog-form .img-form #img_imgSrc").live('change', function(){
+                $(".tiny-edit-panel .banner p").text('uploading...');
+                $(".blog-form .img-form form").ajaxSubmit({success:function(r){
+                    $(".blog-form .main-form #blog_bannerCloudurl").val(r.cloudUrl);
+                    $(".tiny-edit-panel .banner p").text('');
+                    $(".tiny-edit-panel .banner img").attr('src', r.cloudUrl);
+                }});
             });
 
             $(".tiny-edit-panel .opt .cancel").live('click', function(){
@@ -107,14 +119,28 @@ $.fn.extend({
             $(".tiny-edit-panel .opt .ok").live('click', function(){
                 var blogData = {};
                 blogData.title = $('.tiny-edit-panel .title').val();
-                blogData.bannerUrl = $('.tiny-edit-panel .banner input').val();
                 blogData.content = $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html();
-                params.create(blogData, createSuccess);
+
+                $(".blog-form #blog_title").val(blogData.title);
+                $(".blog-form #blog_content").val(blogData.content);
+                $(".blog-form #blog_id").val(-1);
+
+                $(".blog-form form").ajaxSubmit({success:function(r){
+                    blogData.bannerUrl = r.bannerCloudurl;
+                    blogData.id = r.id;
+                    if(params.create){
+                        params.create(blogData);
+                    }
+                    createSuccess();
+                }});
             });
 
             function createSuccess(){
-                alert('s');
+                elements = params.refreshElements();
+                render();
+                $(overlay).click();
             };
         };
+
 	}
 });

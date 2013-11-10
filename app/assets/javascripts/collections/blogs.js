@@ -12,19 +12,10 @@ define(['backbone', 'models/blog'], function(Backbone, Blog){
                             {name:'life', color:'#05809E', status: 'on'}
                         ];
 
-    var initialize = function(){
-        Blogs.fetch();
-        if(Blogs.length == 0){
-            Blogs.add([
-                { id: 1, title: 'dummy blog1', specialty: 'prog', banner:'assets/blog_thumb/image0.jpg', createTime: "13-08"},
-                { id: 2, title: 'dummy blog2', specialty: 'prog', banner:'assets/blog_thumb/image1.jpg', createTime: "13-08"},
-                { id: 3, title: 'dummy blog3', specialty: 'idea', banner:'assets/blog_thumb/image2.jpg', createTime: "13-09"},
-                { id: 4, title: 'dummy blog4', specialty: 'prog', banner:'assets/blog_thumb/image3.jpg', createTime: "13-10"},
-                { id: 5, title: 'dummy blog5', specialty: 'life', banner:'assets/blog_thumb/image4.jpg', createTime: "13-10"},
-                { id: 6, title: 'dummy blog6', specialty: 'idea', banner:'assets/blog_thumb/image5.jpg', createTime: "13-10"},
-                { id: 7, title: 'dummy blog7', specialty: 'prog', banner:'assets/blog_thumb/image6.jpg', createTime: "13-10"}
-            ]);
-        }
+    var initialize = function(callBack){
+        Blogs.fetch({success:function(){
+            callBack();
+        }});
     };
 
     var getSpecialty = function(name){
@@ -38,8 +29,8 @@ define(['backbone', 'models/blog'], function(Backbone, Blog){
         return item;
     };
 
-    var create = function(data, success){
-        Blogs.create({'title':(data.title || ''), 'banner':(data.bannerUrl || ''), 'content':(data.content || '')},{success: success});
+    var create = function(data){
+        Blogs.add({title:(data.title || ''), bannerCloudurl:(data.bannerUrl || ''), content:(data.content || ''), id:data.id || ''});
     };
 
     return {

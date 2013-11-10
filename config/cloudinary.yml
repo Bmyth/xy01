@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: hd8ndypc8
+  api_key: '158872421341881'
+  api_secret: gixY0f5_LXag3i66kwyLYDajA8E
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: hd8ndypc8
+  api_key: '158872421341881'
+  api_secret: gixY0f5_LXag3i66kwyLYDajA8E
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: hd8ndypc8
+  api_key: '158872421341881'
+  api_secret: gixY0f5_LXag3i66kwyLYDajA8E
+  enhance_image_tag: true
+  static_image_support: false
