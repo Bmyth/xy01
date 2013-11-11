@@ -4,8 +4,6 @@ define(['backbone'], function(Backbone){
         bannerCloudurl: "",
         content : "",
         id: "",
-        tag: "",
-        specialty: "",
         created_at: "",
         updated_at: "",
 

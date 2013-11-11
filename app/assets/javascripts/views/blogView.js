@@ -1,9 +1,21 @@
-define(['backbone', 'text!template/blogView_template.html', 'collections/blogs', 'models/blog', 'jquery-ui'],function(Backbone, viewTemplate, Blogs, Blog, jui){
+define(
+    ['backbone',
+     'text!template/blogView_template.html',
+     'collections/blogs',
+     'lib/bmyth_plugin/tiny',
+     'jquery-ui'],
+    function(
+        Backbone,
+        viewTemplate,
+        Blogs,
+        tinyPlug,
+        jui)
+    {
     var BlogView = Backbone.View.extend({
         blogIndex : 0,
         blogSubLength : 3,
         blogList : [],
-        login: false,
+        login: true,
         initialize: function() {
             this.template = _.template(viewTemplate);
             Blogs.initialize($.proxy(this.generateBlogList,this));
@@ -13,6 +25,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
         },
         generateBlogList : function(){
             var that = this;
+            that.blogList = [];
             Blogs.blogList.each(function(blog){
                 that.blogList.push({
                     title: blog.get('title'),
@@ -49,7 +62,7 @@ define(['backbone', 'text!template/blogView_template.html', 'collections/blogs',
                 height: 600,
                 elementWidth: 185,
                 elementHeight: 185,
-                create: Blogs.create,
+                createBlog: Blogs.createBlog,
                 refreshElements: $.proxy(this.generateBlogList, this),
                 login:this.login});
         }

@@ -13,11 +13,12 @@ class NexusController < ApplicationController
     render :json => {:cloudUrl => "http://res.cloudinary.com/hd8ndypc8/image/upload/" + imgName + ".jpg"}
   end
 
-  def blogAdd
-    if params[:blog][:id] == '-1'
-      blog = Blog.create! params[:blog]
-    else
-    end
+  def blogCreate
+    blog = Blog.create!
+    blog.title = params[:title]
+    blog.content = params[:content]
+    blog.bannerCloudurl = params[:bannerCloudurl]
+    blog.save!
     render :json => blog
   end
 end

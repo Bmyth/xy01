@@ -1,4 +1,22 @@
-define(['backbone', 'text!template/mainView_template.html', 'views/blogView', 'views/timelineView', 'views/gridView','views/meView'],function(Backbone, viewTemplate, blogView, timelineView, gridView, meView){
+define(
+    ['backbone',
+    'text!template/mainView_template.html',
+    'views/blogView',
+    'views/timelineView',
+    'views/gridView',
+    'views/meView',
+    'lib/bmyth_plugin/meepo',
+    'lib/bmyth_plugin/tristram'],
+    function(
+        Backbone,
+        viewTemplate,
+        blogView,
+        timelineView,
+        gridView,
+        meView,
+        meepoPlug,
+        tristramPlug
+    ){
     var MainView = Backbone.View.extend({
         subViewList : [],
         status: "",

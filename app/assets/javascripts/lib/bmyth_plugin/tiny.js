@@ -24,17 +24,15 @@ $.fn.extend({
                                 "</p>" +
                               "</div>";
         var addonTemplate = "<div class='tiny-element addon'>" +
-            "<p class='cb cb1'>" +
-            "<p class='cb cb2'>" +
-            "<p class='cb cb3'>" +
-            "<p class='cb cb4'>" +
+            "<img src='assets/tiny/add_blog2.png' style='width: 185px; height:185px;'>" +
             "</div>";
         var editForm = "<form class='tiny-edit-form'>" +
                         "<div class='tiny-edit-panel'>" +
                             "<input class='title'>" +
                             "<div class='banner'>" +
-                                "<img src='assets/tiny/banner.png'>" +
+                                "<img src='assets/tiny/add_banner.png'>" +
                                 "<p></p>" +
+                                "<div class='banner-buffer' style='display: none'><input class='banner-input' type='file'><span class='img-url'></span></div>" +
                             "</div>" +
                             "<p class='opt'>" +
                                 "<a class='ok' href='#'>Ok</a>" + "/" +
@@ -43,6 +41,10 @@ $.fn.extend({
                         "</div>" +
                         "<textarea name='content' style='width:796px;height:560px;'></textarea>" +
                        "</form>";
+        var bannerAjaxForm = "<form action='/api/imgAdd' method='post' style='display: none' class='temp-banner-form'>" +
+                                "<input id='img_imgSrc' name='img[imgSrc]' type='file'>" +
+                             "</form>";
+
 
         var overlayTemplate = "<div class='tiny-overlay'></div>";
 
@@ -93,21 +95,24 @@ $.fn.extend({
 
             $(".tiny-element.addon").live('click', function(){
                 $(editForm).appendTo(detailContainer);
+                $(bannerAjaxForm).appendTo(parent);
+                $(".temp-banner-form").ajaxForm();
                 KindEditor.create('textarea[name="content"]');
                 detailContainer.fadeIn();
                 $(overlay).show();
             });
 
             $(".tiny-edit-panel .banner img").live('click', function(){
-                $(".blog-form .img-form #img_imgSrc").click();
+                $(".temp-banner-form #img_imgSrc").click();
             });
 
 
-            $(".blog-form .img-form #img_imgSrc").live('change', function(){
+            $(".temp-banner-form #img_imgSrc").live('change', function(){
                 $(".tiny-edit-panel .banner p").text('uploading...');
-                $(".blog-form .img-form form").ajaxSubmit({success:function(r){
-                    $(".blog-form .main-form #blog_bannerCloudurl").val(r.cloudUrl);
+
+                $(".temp-banner-form").ajaxSubmit({success:function(r){
                     $(".tiny-edit-panel .banner p").text('');
+                    $(".tiny-edit-panel .banner-buffer .img-url").val(r.cloudUrl);
                     $(".tiny-edit-panel .banner img").attr('src', r.cloudUrl);
                 }});
             });
@@ -120,19 +125,9 @@ $.fn.extend({
                 var blogData = {};
                 blogData.title = $('.tiny-edit-panel .title').val();
                 blogData.content = $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html();
+                blogData.bannerUrl = $(".tiny-edit-panel .banner-buffer .img-url").val();
 
-                $(".blog-form #blog_title").val(blogData.title);
-                $(".blog-form #blog_content").val(blogData.content);
-                $(".blog-form #blog_id").val(-1);
-
-                $(".blog-form form").ajaxSubmit({success:function(r){
-                    blogData.bannerUrl = r.bannerCloudurl;
-                    blogData.id = r.id;
-                    if(params.create){
-                        params.create(blogData);
-                    }
-                    createSuccess();
-                }});
+                params.createBlog(blogData, createSuccess);
             });
 
             function createSuccess(){
@@ -141,6 +136,5 @@ $.fn.extend({
                 $(overlay).click();
             };
         };
-
 	}
 });

@@ -1,0 +1,6 @@
+11.10
+refactor:
+1 ajax form -> backbone model create
+2 status machine manage URL and login
+3 cut global js file
+4 separate js layers
