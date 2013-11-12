@@ -5,6 +5,15 @@ $.fn.extend({
             width : 185
         });
 
+        $.kael('regist',{status:'login',
+            activeEvent:function(){
+                $('.tri-login').text('open');
+                $.cookie('logged-in','yes');
+        },inactiveEvent:function(){
+                $('.tri-login').text('login');
+                $.cookie('logged-in', null);
+        },registHistory:'tristram'},false);
+
         var tristramTemplate = "<div class='tristram-container'>" +
                                     "<div class='tri-element te1' num=1><img src='assets/tristram/1white.png'></div>" +
                                     "<div class='tri-element te2' num=2><img src='assets/tristram/2white.png'></div>" +
@@ -25,15 +34,12 @@ $.fn.extend({
         });
 
         var spell = "";
-
         var password = "142857";
 
-        var open = $.cookie('logged-in') === 'yes' ? true : false;
-        var text = $.cookie('logged-in') === 'yes' ? 'open' : 'log in';
-        $('.tri-login').text(text);
+        $.kael('set',{status:'login', active:($.cookie('logged-in') === 'yes')},false);
 
         tristram.hover(function(){
-            if(!open){
+            if(!$.kael('get',{status:'login'},false)){
                 tristram.animate({top:0},'slow');
             }
         },function(){
@@ -51,22 +57,8 @@ $.fn.extend({
             spell = spell + dig;
 
             if(spell === password){
-//                var spellArray = spell.split("");
-//                spellArray.reverse();
-//                while(spellArray.length > 0){
-//                    var s = spellArray.shift();
-//                    var matchStr = ".avtived[num=" + s + "]";
-//                }
-                open = true;
-                $(".tri-login").text("open");
-                $.cookie('logged-in','yes');
-
-                if(params.loginSuccess){
-                    params.loginSuccess();
-                }
-
+                $.kael('set',{status:'login', active:true},false);
                 tristram.animate({top: -84});
-
             }else{
                 $(this).addClass('actived');
             }

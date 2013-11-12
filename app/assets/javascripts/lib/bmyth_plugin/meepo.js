@@ -1,5 +1,5 @@
 $.fn.extend({
-	meepo: function(params){
+	meepo: function(params, section){
         var parent = $(this);
         var transformMode = "";
 
@@ -22,7 +22,7 @@ $.fn.extend({
 
         var meepoTemplate = "<div class='meepo-shelf'>" +
             "<div class='slider'></div>" +
-            "<div class='main-view-element shelf-element' href='#home'>" +
+            "<div class='main-view-element shelf-element'>" +
             "<span>home</span>" +
             "<p class='desc'>home</p>" +
             "</div>" +
@@ -47,8 +47,8 @@ $.fn.extend({
             render();
         }
 
-        if(typeof params === "string"){
-            jumpTo(params);
+        if(section){
+            jumpTo(section);
         }
 
         function render(){
@@ -69,9 +69,10 @@ $.fn.extend({
             shelfIndex();
             menuSlider();
 
-            $('.shelf-element.click-to-render').live('click',transformToGrandView);
-            $('.shelf-element.click-to-switch').live('click',switchGrandView);
-            $('.main-view-element').click(transformToMainView);
+            $('.shelf-element').live('click', function(){
+                var section = $(this).find('span').text();
+                $.kael('set', {status:'mainStatus', value:section, active:true, unique:true}, true);
+            });
         };
 
         function renderShelf(){
@@ -116,7 +117,7 @@ $.fn.extend({
             var frontColor = ele.frontColor || defaultFrontColor;
             var backColor = ele.backColor || defaultBackColor;
             var shelfContainer = parent.find('.meepo-shelf');
-            var href = "/#" + ele.title || defaultTitle;
+            var href = "";
             if(ele.shelfElement){
                 $(ele.shelfElement).css({
                     'float':'left',
@@ -151,11 +152,11 @@ $.fn.extend({
             }
         }
 
-        function transformToGrandView(){
+        function transformToGrandView(ele){
             transformMode = "toGrand";
             hideSlider();
             $(".shelf-element.disappeared").removeClass("disappeared");
-            $(this).addClass('disappeared');
+            $(ele).addClass('disappeared');
             shelfUp();
         };
 
@@ -165,12 +166,11 @@ $.fn.extend({
             pushMainElementOut();
         };
 
-        function switchGrandView(){
+        function switchGrandView(ele){
             transformMode = "switch";
             hideSlider();
-            $(this).addClass('to-switch');
+            $(ele).addClass('to-switch');
             pushMainElementOut();
-
         };
 
         function renderGrand(){
@@ -220,10 +220,6 @@ $.fn.extend({
             $(".click-to-switch").addClass("click-to-render").removeClass("click-to-switch");
             $('.meepo-shelf').animate({'margin-top': shelfOffset},600);
             $('.shelf-element').animate({height:elementSize}, 600);
-
-            if(params.backHomeEvent){
-                params.backHomeEvent();
-            }
         }
 
         function pushSelectedElementDown(){
@@ -249,7 +245,6 @@ $.fn.extend({
                 var ghost = $('.shelf-element.disappeared').find('.ghost').animate({'height': '0px'}, 600);
                 $('.meepo-grand').animate({'height': '0px'}, 600, pushSelectedElementDown);
             }
-
         };
 
         function pushMainElementIn(){
@@ -262,19 +257,25 @@ $.fn.extend({
             $('.shelf-element.main-view-element').animate({width: '0', 'margin-left': '0px', 'margin-right': '0px'}, 'fast');
         };
 
-
         function jumpTo(section){
-            if(section === 'home'){
-                $('.main-view-element').click();
-                return ;
-            }
-
             $(".meepo-shelf .shelf-element").each(function(){
                 if($(this).find("span").text() === section){
-                    $(this).click();
+                    if(!$(this).hasClass('disappeared')){
+                        transform(this)
+                    }
                     return false;
                 }
             });
+        };
+
+        function transform(ele){
+            if($(ele).hasClass('click-to-render')){
+                transformToGrandView(ele);
+            }else if($(ele).hasClass('click-to-switch')){
+                switchGrandView(ele);
+            }else{
+                transformToMainView();
+            }
         };
 
         function rendered(){
@@ -283,6 +284,6 @@ $.fn.extend({
             }else{
                 return false;
             }
-        }
+        };
 	}
 });

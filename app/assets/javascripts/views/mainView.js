@@ -1,93 +1,65 @@
-define(
-    ['backbone',
-    'text!template/mainView_template.html',
-    'views/blogView',
-    'views/timelineView',
-    'views/gridView',
-    'views/meView',
-    'lib/bmyth_plugin/meepo',
-    'lib/bmyth_plugin/tristram'],
+define(['backbone','text!template/mainView_template.html',
+        'views/blogView','views/timelineView','views/gridView','views/meView',
+        'lib/bmyth_plugin/meepo',
+        'lib/bmyth_plugin/tristram'],
     function(
-        Backbone,
-        viewTemplate,
-        blogView,
-        timelineView,
-        gridView,
-        meView,
-        meepoPlug,
-        tristramPlug
-    ){
+        Backbone,viewTemplate,
+        blogView,timelineView,gridView,meView,
+        meepoPlug,tristramPlug){
     var MainView = Backbone.View.extend({
-        subViewList : [],
-        status: "",
-        events: {
 
-        },
         initialize: function() {
             this.template = _.template(viewTemplate);
-            this.subViewList.push(blogView, timelineView, gridView, meView);
-            this.status = "home";
-        },
-        render: function(container, section) {
+
+            $.kael('regist',{status:'mainStatus', value:'home', activeEvent:renderHome, inactiveEvent: leaveHome, registHistory:'renderHome'},true);
+            $.kael('regist',{status:'mainStatus', value:'blog', activeEvent:renderBlog, registHistory:'renderBlog'},true);
+            $.kael('regist',{status:'mainStatus', value:'time line', activeEvent:renderTimeline, registHistory:'renderTimeline'},true);
+            $.kael('regist',{status:'mainStatus', value:'grid', activeEvent:renderGrid, registHistory:'renderGrid'},true);
+            $.kael('regist',{status:'mainStatus', value:'me', activeEvent:renderMe, registHistory:'renderMe'},true);
+
+            var meepoParams = {size: 800, grandHeight: 640, elementSize : 185, elementMargin: 10, shelfOffset: 360,
+                elements:[
+                    {title:blogView.title, desc:blogView.desc, frontColor: "#ffffff", backColor: blogView.basicColor, render: blogView.renderGrandElement},
+                    {title:timelineView.title, desc:timelineView.desc, frontColor: "#ffffff", backColor: timelineView.basicColor, render: timelineView.renderGrandElement},
+                    {title:gridView.title, desc:gridView.desc, frontColor: "#ffffff", backColor: gridView.basicColor, render: gridView.renderGrandElement},
+                    {title:meView.title, desc:meView.desc, frontColor: "#ffffff", backColor: meView.basicColor, render:   meView.renderGrandElement}
+                ]
+            };
+
             if(!$(".main-view-container").get(0)){
                 var content =  $(this.template()).children(".main-view-container");
-                $(container).append($(content));
-
-                $('.content-panel').meepo({size: 800, grandHeight: 640, elementSize : 185, elementMargin: 10, shelfOffset: 360,
-                    elements:[
-                        {title:blogView.title, desc:blogView.desc, frontColor: "#ffffff", backColor: blogView.basicColor, render: renderBlog},
-                        {title:timelineView.title, desc:timelineView.desc, frontColor: "#ffffff", backColor: timelineView.basicColor, render: renderTimeline},
-                        {title:gridView.title, desc:gridView.desc, frontColor: "#ffffff", backColor: gridView.basicColor, render: renderGrid},
-                        {title:meView.title, desc:meView.desc, frontColor: "#ffffff", backColor: meView.basicColor, render: renderMe}
-                    ], backHomeEvent: backHome
-                });
-
-                $('.login').tristram({loginSuccess:loginSuccess});
+                $(".container").append($(content));
+                $('.content-panel').meepo(meepoParams);
+                $('.login').tristram();
             }
 
-            $(".login").hide();
-            if(this.status != section){
-                $().meepo(section);
-                this.status = section;
-            }
-
-            if(this.status === 'home'){
+            function renderHome(){
                 $(".login").show();
-            }
-
-            function backHome(){
-                this.status = 'home';
-                $(".login").show();
-                history.pushState({},'home','/');
+                $('.content-panel').meepo(meepoParams, 'home');
             };
 
-            function loginSuccess(){
-                blogView.login(true);
-            };
-
-            function renderBlog(container){
+            function leaveHome(){
                 $(".login").hide();
-                blogView.renderGrandElement(container);
-                history.pushState({},'blog','/#blog');
             };
 
-            function renderTimeline(container){
-                $(".login").hide();
-                timelineView.renderGrandElement(container);
-                history.pushState({},'timeline','/#timeline');
+            function renderBlog(){
+                $('.content-panel').meepo(meepoParams, 'blog');
             };
 
-            function renderGrid(container){
-                $(".login").hide();
-                gridView.renderGrandElement(container);
-                history.pushState({},'grid','/#grid');
+            function renderTimeline(){
+                $('.content-panel').meepo(meepoParams, 'time line');
             };
 
-            function renderMe(container){
-                $(".login").hide();
-                meView.renderGrandElement(container);
-                history.pushState({},'me','/#me');
+            function renderGrid(){
+                $('.content-panel').meepo(meepoParams, 'grid');
             };
+
+            function renderMe(){
+                $('.content-panel').meepo(meepoParams, 'me');
+            };
+        },
+        render: function(container, section) {
+            $.kael('set', {status:'mainStatus', value:section, active:true, unique: true}, true);
         }
     });
 
@@ -98,11 +70,7 @@ define(
     };
 
     var render = function(container, section){
-        if(section){
-            mainView.render(container, section);
-        }else{
-            mainView.render(container, 'home');
-        }
+        mainView.render(container, section);
     };
 
     return {
