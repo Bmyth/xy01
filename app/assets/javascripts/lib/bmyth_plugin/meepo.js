@@ -1,5 +1,5 @@
 $.fn.extend({
-	meepo: function(params, section){
+	meepo: function(params, section, subsection, param){
         var parent = $(this);
         var transformMode = "";
 
@@ -73,6 +73,12 @@ $.fn.extend({
                 var section = $(this).find('span').text();
                 $.kael('set', {status:'mainStatus', value:section, active:true, unique:true}, true);
             });
+        };
+
+        function renderSubsection(subsection){
+//            assume the hiden one is section
+            var idx = $(".shelf-element.disappeared").attr('eleIndex');
+            params.elements[idx].render('.meepo-grand', subsection, param);
         };
 
         function renderShelf(){
@@ -187,8 +193,8 @@ $.fn.extend({
                         'color': frontColor,
                         'backgroundColor': backColor
                     }).addClass("grand-element").appendTo($('.meepo-grand'));
-                }else if(params.elements[idx].render){
-                    params.elements[idx].render('.meepo-grand');
+                }else if(params.elements[idx].render ){
+                    params.elements[idx].render('.meepo-grand', subsection, param);
                 }else{
                     $(grandElementTemplate).css({
                         'height':grandHeight,
@@ -259,9 +265,13 @@ $.fn.extend({
 
         function jumpTo(section){
             $(".meepo-shelf .shelf-element").each(function(){
-                if($(this).find("span").text() === section){
-                    if(!$(this).hasClass('disappeared')){
-                        transform(this)
+                var elementSection = $(this).find("span").text();
+                if(elementSection === section){
+                    if(($(this).hasClass("disappeared"))){
+                        var idx = $(this).attr('eleindex');
+                        params.elements[idx].render('.meepo-grand', subsection, param);
+                    }else{
+                        transform(this);
                     }
                     return false;
                 }

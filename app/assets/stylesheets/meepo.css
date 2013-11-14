@@ -4,6 +4,7 @@
     border-bottom: 1px solid #ccc;
     overflow: hidden;
     position: relative;
+    z-index: 8;
 }
 
 .meepo-shelf .slider{

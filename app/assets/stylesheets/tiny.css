@@ -18,24 +18,23 @@
     overflow: hidden;
     cursor: pointer;
 }
+.tiny-container .tiny-element img{
+    position: absolute;
+    left: 20px;
+    border: 1px solid #ccc;
+}
 .tiny-container .tiny-element .desc{
-   position: absolute;
-   bottom: 7px;
-   opacity: 0.8;
-   background-color: #000;
+   background-color: #666;
    color: #fff;
+   padding: 5px 0;
    font-weight: bold;
    width: 100%;
-   padding: 2px;
+   margin-top: 25px;
 }
-.tiny-container .date-divider{
-    width: 100%;
-    float: left;
-}
-.tiny-container .date-divider p{
-    margin-left: 13px;
-    margin-bottom: -8px;
-    color: #aaa;
+.tiny-container .tiny-element .desc p{
+    text-align: right;
+    margin-right: 15px;
+    font-size: 18px;
 }
 .tiny-overlay{
     width: 100%;
@@ -97,4 +96,15 @@
     margin: 10px 5px;
     text-decoration: none;
     color: #aaa;
+}
+.tiny-opt{
+    height: 20px;
+    float: right;
+    font-weight: bold;
+    color: #fff;
+}
+.tiny-opt .opt-item{
+    width: 45px;
+    margin-right: 10px;
+    cursor: pointer;
 }

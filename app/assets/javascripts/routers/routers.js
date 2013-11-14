@@ -1,65 +1,110 @@
 define(['backbone', 'views/mainView'],function(Backbone, MainView){
     var AppRouter = Backbone.Router.extend({
         routes : {
-            'blog' : 'blog',
-            'timeline' : 'timeline',
-            'grid' : 'grid',
-            'me' : 'me',
-            '*actions' : 'index'
+            'blog' : blog,
+            'timeline' : timeLine,
+            'grid' : grid,
+            'me' : me,
+            'blog/create' : blogCreate,
+            'blog/:id' :blogShow,
+            '*actions' : index
         }
     });
 
     var initialize = function(){
         var router = new AppRouter;
 
-        $.kael('regist',{status:'mainStatus', value:'home', activeEvent:routeHome, registHistory:'routeHome'},true);
-        $.kael('regist',{status:'mainStatus', value:'blog', activeEvent:routeBlog, registHistory:'routeBlog'},true);
-        $.kael('regist',{status:'mainStatus', value:'time line', activeEvent:routeTimeline, registHistory:'routeTimeline'},true);
-        $.kael('regist',{status:'mainStatus', value:'grid', activeEvent:routeGrid, registHistory:'routeGrid'},true);
-        $.kael('regist',{status:'mainStatus', value:'me', activeEvent:routeMe, registHistory:'routeMe'},true);
+        $.kael('regist',{status:'mainStatus', value:'home', activeEvent:setHomeRoute, registHistory:'setHomeRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'blog', activeEvent:setBlogRoute, registHistory:'setBlogRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'time line', activeEvent:setTimelineRoute, registHistory:'setTimelineRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'grid', activeEvent:setGridRoute, registHistory:'setGridRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'me', activeEvent:setMeRoute, registHistory:'setMeRoute'},true);
 
-        router.on('route:index', function(){
-           MainView.render($('.container'),'home');
-        });
+        $.kael('regist',{status:'blogStatus', value:'list', activeEvent:setBlogListRoute, registHistory:'setBlogListRoute'},true);
+        $.kael('regist',{status:'blogStatus', value:'create', activeEvent:setBlogCreateRoute, registHistory:'setBlogCreateRoute'},true);
+        $.kael('regist',{status:'blogStatus', value:'show', activeEvent:setBlogShowRoute, registHistory:'setBlogShowRoute'},true);
 
-        router.on('route:blog', function(){
-            MainView.render($('.container'),'blog');
-        });
-
-        router.on('route:timeline', function(){
-            MainView.render($('.container'),'time line');
-        });
-
-        router.on('route:grid', function(){
-            MainView.render($('.container'),'grid');
-        });
-
-        router.on('route:me', function(){
-            MainView.render($('.container'),'me');
-        });
-
-        function routeHome(){
-            history.pushState(null, 'home', '#home');
-        }
-
-        function routeBlog(){
-            history.pushState(null, 'blog', '#blog');
-        }
-
-        function routeTimeline(){
-            history.pushState(null, 'time line', '#time line');
-        }
-
-        function routeGrid(){
-            history.pushState(null, 'grid', '#grid');
-        }
-
-        function routeMe(){
-            history.pushState(null, 'me', '#me');
-        }
-
-       Backbone.history.start();
+        Backbone.history.start();
     };
+
+    function index(){
+        $.kael('set', {status:'mainStatus', value:'home', active: true, static: true}, true);
+        MainView.render($('.container'),'home');
+    };
+
+    function blog(){
+        $.kael('set', {status:'mainStatus', value:'blog', active: true, static: true}, true);
+        $.kael('set', {status:'blogStatus', value:'list', active: true, static: true}, true);
+        MainView.render($('.container'),'blog', 'list');
+    };
+
+    function blogCreate(){
+        $.kael('set', {status:'mainStatus', value:'blog', active: true, static: true}, true);
+        $.kael('set', {status:'blogStatus', value:'create', active: true, static: true}, true);
+        MainView.render($('.container'),'blog', 'create');
+    };
+
+    function blogShow(id){
+        $.kael('set', {status:'mainStatus', value:'blog', active: true, static: true}, true);
+        $.kael('set', {status:'blogStatus', value:'show', active: true, static: true}, true);
+        MainView.render($('.container'),'blog', 'show', id);
+    };
+
+    function timeLine(){
+        $.kael('set', {status:'mainStatus', value:'time line', active: true, static: true}, true);
+        MainView.render($('.container'),'time line');
+    };
+
+    function grid(){
+        $.kael('set', {status:'mainStatus', value:'grid', active: true, static: true}, true);
+        MainView.render($('.container'),'grid');
+    };
+
+    function me(){
+        $.kael('set', {status:'mainStatus', value:'me', active: true, static: true}, true);
+        MainView.render($('.container'),'me');
+    };
+
+    function setHomeRoute(){
+        history.pushState(null, 'home', '#');
+        index();
+    }
+
+    function setBlogRoute(){
+        history.pushState(null, 'blog', '#blog');
+        blog();
+    }
+
+    function setTimelineRoute(){
+        history.pushState(null, 'time line', '#time line');
+        timeLine();
+    }
+
+    function setGridRoute(){
+        history.pushState(null, 'grid', '#grid');
+        grid();
+    }
+
+    function setMeRoute(){
+        history.pushState(null, 'me', '#me');
+        me();
+    }
+
+    function setBlogListRoute(){
+        history.pushState(null, 'blog list', '#blog');
+        blog();
+    }
+
+    function setBlogCreateRoute(){
+        history.pushState(null, 'blog create', '#blog/create');
+        blogCreate();
+    }
+
+    function setBlogShowRoute(){
+        var id = $.kael('param', {status:'blogStatus', value:'show'}, true);
+        history.pushState(null, 'blog show', '#blog/' + id);
+        blogShow(id);
+    }
 
     return {
         initialize : initialize

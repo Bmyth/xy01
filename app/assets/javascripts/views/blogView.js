@@ -1,31 +1,28 @@
 define(
-    ['backbone',
-     'text!template/blogView_template.html',
+    ['backbone', 'text!template/blogView_template.html',
      'collections/blogs',
-     'lib/bmyth_plugin/tiny',
-     'jquery-ui'],
+     'lib/bmyth_plugin/tiny','jquery-ui'],
     function(
-        Backbone,
-        viewTemplate,
+        Backbone, viewTemplate,
         Blogs,
-        tinyPlug,
-        jui)
+        tinyPlug, jui)
     {
     var BlogView = Backbone.View.extend({
         blogIndex : 0,
         blogSubLength : 3,
         blogList : [],
         login: true,
+        subSection: null,
         initialize: function() {
             this.template = _.template(viewTemplate);
-            Blogs.initialize($.proxy(this.generateBlogList,this));
+            $.kael('regist',{status:'blogDataReady'},false);
         },
         render: function(container) {
 
         },
         generateBlogList : function(){
+            this.blogList = [];
             var that = this;
-            that.blogList = [];
             Blogs.blogList.each(function(blog){
                 that.blogList.push({
                     title: blog.get('title'),
@@ -54,17 +51,30 @@ define(
             $(container).append(content);
         },
         renderBlog : function(container){
-            $(this.template()).children(".grand-element").attr('viewName', viewName).css({backgroundColor:'#fff'}).appendTo(container);
-            $('.blog-grand-element').tiny({
-                specialtyList: Blogs.specialtyList,
-                elements: this.blogList,
-                width: 800,
-                height: 600,
-                elementWidth: 185,
-                elementHeight: 185,
-                createBlog: Blogs.createBlog,
-                refreshElements: $.proxy(this.generateBlogList, this),
-                login:this.login});
+            var that = this;
+            if(!$.kael('get', {status:'mainStatus', value:'blog'}, true)) {
+                return;
+            }
+
+            if(!$(".blog-grand-element").get(0)) {
+                $(this.template()).children(".grand-element").attr('viewName', viewName).css({backgroundColor: '#fff'}).appendTo(container);
+            }
+
+            if($.kael('get', {status:'blogDataReady'}, false)){
+                this.generateBlogList();
+                $('.blog-grand-element').tiny({
+                    elements: this.blogList,
+                    width: 800,
+                    height: 600,
+                    elementWidth: 800,
+                    elementHeight: 185,
+                    createBlog: Blogs.createBlog,
+                    refreshElements: $.proxy(this.generateBlogList, this),
+                    optPanel: $('.blog-footer')
+                }, this.subSection, this.blogIndex);
+            }else{
+                Blogs.getData($.proxy(this.renderBlog, this));
+            }
         }
     });
 
@@ -82,20 +92,14 @@ define(
         view.initialize();
     };
 
-    var render = function(container){
-        view.render(container);
-    };
-
     var renderShelfElement = function(container) {
         view.renderShelfElement(container);
     };
 
-    var renderGrandElement = function(container){
+    var renderGrandElement = function(container, subsection, bid){
+        view.subSection = subsection;
+        view.blogIndex = bid;
         view.renderBlog(container);
-    };
-
-    var login = function(flag){
-        view.login = flag;
     };
 
     return {
@@ -105,7 +109,6 @@ define(
         desc : description,
         basicColor : basicColor,
         renderShelfElement : renderShelfElement,
-        renderGrandElement : renderGrandElement,
-        login : login
+        renderGrandElement : renderGrandElement
     };
 })
