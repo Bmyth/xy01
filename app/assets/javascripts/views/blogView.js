@@ -17,41 +17,23 @@ define(
             this.template = _.template(viewTemplate);
             $.kael('regist',{status:'blogDataReady'},false);
         },
-        render: function(container) {
-
-        },
         generateBlogList : function(){
             this.blogList = [];
             var that = this;
             Blogs.blogList.each(function(blog){
                 that.blogList.push({
                     title: blog.get('title'),
-                    color: "",
-                    render: $.proxy(that.renderInDetail, that),
                     banner: blog.get('bannerCloudurl'),
-                    date: blog.get('createTime'),
                     id: blog.get('id')
                 });
             });
             return this.blogList;
-        },
-        renderInDetail : function(idx){
-            var element = this.blogList[idx];
-            var id = element.id;
-            var blog = Blogs.blogList.get(id);
-            var title = blog.get('title');
-            var blogContent = blog.get('content');
-            var content = $(this.template()).children(".blog-content");
-            content.find('.blog-title').text(title);
-            content.find('.blog-content').html(blogContent);
-            return content
         },
         renderShelfElement : function(container) {
             var content = $(this.template()).children(".shelf-element").attr('viewName', viewName).css({backgroundColor:basicColor});
             $(container).append(content);
         },
         renderBlog : function(container){
-            var that = this;
             if(!$.kael('get', {status:'mainStatus', value:'blog'}, true)) {
                 return;
             }
@@ -68,12 +50,14 @@ define(
                     height: 600,
                     elementWidth: 800,
                     elementHeight: 185,
-                    createBlog: Blogs.createBlog,
+                    submitBlog: Blogs.submitBlog,
+                    readBlog: Blogs.readBlog,
+                    deleteBlog: Blogs.deleteBlog,
                     refreshElements: $.proxy(this.generateBlogList, this),
                     optPanel: $('.blog-footer')
                 }, this.subSection, this.blogIndex);
             }else{
-                Blogs.getData($.proxy(this.renderBlog, this));
+                Blogs.fetchData($.proxy(this.renderBlog, this));
             }
         }
     });

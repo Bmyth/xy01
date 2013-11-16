@@ -2,11 +2,12 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
     var AppRouter = Backbone.Router.extend({
         routes : {
             'blog' : blog,
+//            'blog/create' : blogCreate,
+//            'blog/edit' : blogEdit,
+            'blog/:id' :blogShow,
             'timeline' : timeLine,
             'grid' : grid,
             'me' : me,
-            'blog/create' : blogCreate,
-            'blog/:id' :blogShow,
             '*actions' : index
         }
     });
@@ -22,6 +23,7 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
 
         $.kael('regist',{status:'blogStatus', value:'list', activeEvent:setBlogListRoute, registHistory:'setBlogListRoute'},true);
         $.kael('regist',{status:'blogStatus', value:'create', activeEvent:setBlogCreateRoute, registHistory:'setBlogCreateRoute'},true);
+        $.kael('regist',{status:'blogStatus', value:'edit', activeEvent:setBlogEditRoute, registHistory:'setBlogEditRoute'},true);
         $.kael('regist',{status:'blogStatus', value:'show', activeEvent:setBlogShowRoute, registHistory:'setBlogShowRoute'},true);
 
         Backbone.history.start();
@@ -44,9 +46,15 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
         MainView.render($('.container'),'blog', 'create');
     };
 
+    function blogEdit(id){
+        $.kael('set', {status:'mainStatus', value:'blog', active: true, static: true}, true);
+        $.kael('set', {status:'blogStatus', value:'edit', active: true, static: true}, true);
+        MainView.render($('.container'),'blog', 'edit', id);
+    };
+
     function blogShow(id){
         $.kael('set', {status:'mainStatus', value:'blog', active: true, static: true}, true);
-        $.kael('set', {status:'blogStatus', value:'show', active: true, static: true}, true);
+        $.kael('set', {status:'blogStatus', value:'show', active: true, param: id, static: true}, true);
         MainView.render($('.container'),'blog', 'show', id);
     };
 
@@ -98,6 +106,12 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
     function setBlogCreateRoute(){
         history.pushState(null, 'blog create', '#blog/create');
         blogCreate();
+    }
+
+    function setBlogEditRoute(){
+        var id = $.kael('param', {status:'blogStatus', value:'edit'}, true);
+        history.pushState(null, 'blog edit', '#blog/edit/' + id);
+        blogEdit(id);
     }
 
     function setBlogShowRoute(){

@@ -34,9 +34,14 @@ $.fn.extend({
         });
 
         var spell = "";
-        var password = "142857";
 
-        $.kael('set',{status:'login', active:($.cookie('logged-in') === 'yes')},false);
+        if($.cookie('logged-in') === 'yes'){
+            $.post("api/loginNotify",function(){
+                $.kael('set',{status:'login', active:true},false);
+            });
+        }else{
+            $.kael('set',{status:'login', active:false},false);
+        }
 
         tristram.hover(function(){
             if(!$.kael('get',{status:'login'},false)){
@@ -56,12 +61,16 @@ $.fn.extend({
             var dig = $(this).attr('num');
             spell = spell + dig;
 
-            if(spell === password){
-                $.kael('set',{status:'login', active:true},false);
-                tristram.animate({top: -84});
-            }else{
-                $(this).addClass('actived');
+            if(spell.length === 6){
+                $.post("api/loginValidate", {password:spell}, function(result){
+                    if(result.validated === true){
+                        $.kael('set',{status:'login', active:true},false);
+                        tristram.animate({top: -84});
+                        return;
+                    }
+                });
             }
+            $(this).addClass('actived');
         });
 
 	}

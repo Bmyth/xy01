@@ -30,6 +30,12 @@ $.fn.extend({
         var deleteTemplate = "<span class='delete opt-item'>delete</span>";
         var backTemplate = "<span class='back opt-item'>back</span>";
 
+        var blogContentTemplate =  "<div class='blog-content'>" +
+                                        "<p class='blog-title'></p>" +
+                                        "<div class='blog-content'></div>" +
+                                    "</div>";
+        var bidRecordTemplate = "<p class='blog-id' style='display: none'></p>";
+
         var editForm = "<form class='tiny-edit-form'>" +
                         "<div class='tiny-edit-panel'>" +
                             "<input class='title'>" +
@@ -41,7 +47,7 @@ $.fn.extend({
                         "</div>" +
                         "<textarea name='content' style='width:796px;height:560px;'></textarea>" +
                        "</form>";
-        var bannerAjaxForm = "<form action='/api/imgAdd' method='post' style='display: none' class='temp-banner-form'>" +
+        var bannerAjaxForm = "<form action='/api/imgCreate' method='post' style='display: none' class='temp-banner-form'>" +
                                 "<input id='img_imgSrc' name='img[imgSrc]' type='file'>" +
                              "</form>";
 
@@ -53,6 +59,7 @@ $.fn.extend({
         var detailContainer = $(".tiny-container .detail-container");
         var optPanel = $(params.optPanel).find('.tiny-opt').get(0) || $(optTemplate).appendTo(params.optPanel).get(0);
         var overlay = $('body').find('.tiny-overlay').get(0) || $(overlayTemplate).prependTo($('body')).get(0);
+        var bidRecord = $(params.optPanel).find('.blog-id').get(0) || $(bidRecordTemplate).appendTo($(params.optPanel)).get(0);
 
         $.kael('regist',{status:'blogRendered', registHistory:'blogRendered'},false);
         if(!$.kael('get',{status:'blogRendered', active: true},false)){
@@ -64,6 +71,8 @@ $.fn.extend({
             renderListMode();
         else if(subsection === 'create')
             renderCreateMode();
+        else if(subsection === 'edit')
+            renderEditMode();
         else if(subsection === 'show')
             renderShowMode();
 
@@ -74,12 +83,17 @@ $.fn.extend({
 
         function renderCreateMode(){
             if($.kael('get',{status:'login'},false)){
-                $(editForm).appendTo(detailContainer);
-                $(bannerAjaxForm).appendTo(parent);
-                $(".temp-banner-form").ajaxForm();
-                KindEditor.create('textarea[name="content"]');
-                detailContainer.fadeIn();
-                $(overlay).show();
+                renderBlogForm();
+                setBlogCreateOpt();
+            }else{
+                $.kael('set',{status:'blogStatus', value:'list', active: true, unique:true}, true);
+            }
+        };
+
+        function renderEditMode(){
+            if($.kael('get',{status:'login'},false)){
+                var blog = params.readBlog(bid);
+                renderBlogForm(blog);
                 setBlogCreateOpt();
             }else{
                 $.kael('set',{status:'blogStatus', value:'list', active: true, unique:true}, true);
@@ -87,12 +101,14 @@ $.fn.extend({
         };
 
         function renderShowMode(){
-            var idx = bid;
-            if(elements[idx].render){
-                var content = elements[idx].render(idx);
-                $(content).appendTo($(".tiny-container .detail-container"));
+            var blog = params.readBlog(bid);
+            if(blog){
+                var content = $(blogContentTemplate).appendTo($(".tiny-container .detail-container"));
+                content.find('.blog-title').text(blog.title);
+                $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html(blog.content);
                 $(".tiny-container .detail-container").fadeIn();
                 $(overlay).show();
+                $(bidRecord).text(blog.id);
             }else{
                 $.kael('set',{status:'blogStatus', value:'list', active: true, unique:true}, true);
             }
@@ -106,9 +122,26 @@ $.fn.extend({
                 var thumbnail = elements[i].banner || defaultThumbnail;
                 var desc = elements[i].title || "tiny element " + i;
 
-                var ele = $(elementTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', i).appendTo(listContainer);
+                var ele = $(elementTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', elements[i].id).appendTo(listContainer);
                 ele.find('.thumbnail').css({maxWidth:160, maxHeight:160}).attr('src', thumbnail);
                 ele.find('.desc p').text(desc);
+            }
+        };
+
+        function renderBlogForm(blog){
+            detailContainer.empty();
+            $(editForm).appendTo(detailContainer);
+            $(bannerAjaxForm).appendTo(parent);
+            $(".temp-banner-form").ajaxForm();
+            KindEditor.create('textarea[name="content"]');
+            detailContainer.fadeIn();
+            $(overlay).show();
+
+            if(blog){
+                $('.tiny-edit-panel .title').val(blog.title);
+                $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html(blog.content);
+                $(".tiny-edit-panel .banner img").attr('src', blog.bannerUrl);
+                $(bidRecord).text(blog.id);
             }
         };
 
@@ -136,37 +169,41 @@ $.fn.extend({
                 $(".tiny-edit-panel .banner p").text('uploading...');
                 $(".temp-banner-form").ajaxSubmit({success:function(r){
                     $(".tiny-edit-panel .banner p").text('');
-                    $(".tiny-edit-panel .banner-buffer .img-url").val(r.cloudUrl);
                     $(".tiny-edit-panel .banner img").attr('src', r.cloudUrl);
                 }});
             });
 
-            $(".tiny-opt .cancel").live('click', function(){
-                $(overlay).click();
-            });
-
             $(".tiny-opt .edit").live('click', function(){
-                alert('edit');
+                var id = $.kael('param', {status:'blogStatus', value:'show'}, true);
+                if(id){
+                    $.kael('set',{status:'blogStatus', value:'edit', active: true, param:id, unique:true}, true);
+                }
             });
 
             $(".tiny-opt .delete").live('click', function(){
-                alert('delete');
+                var id = $(bidRecord).text();
+                params.deleteBlog(id, submitSuccess);
             });
 
-            $(".tiny-opt .ok").live('click', function(){
+            $(".tiny-opt .submit").live('click', function(){
                 var blogData = {};
+                blogData.id = $(bidRecord).text();
                 blogData.title = $('.tiny-edit-panel .title').val();
                 blogData.content = $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html();
-                blogData.bannerUrl = $(".tiny-edit-panel .banner-buffer .img-url").val();
+                blogData.bannerUrl = $(".tiny-edit-panel .banner img").attr('src');
+                params.submitBlog(blogData, submitSuccess);
+            });
 
-                params.createBlog(blogData, createSuccess);
+            $(".tiny-opt .back").live('click', function(){
+                $(overlay).click();
             });
 
             $.kael('regist',{status:'blogStatus', value:'list', activeEvent:setBlogListOpt, registHistory:'setBlogListOpt'},true);
             $.kael('regist',{status:'blogStatus', value:'create', activeEvent:setBlogCreateOpt, registHistory:'setBlogCreateOpt'},true);
             $.kael('regist',{status:'blogStatus', value:'show', activeEvent:setBlogShowOpt, registHistory:'setBlogShowOpt'},true);
 
-            function createSuccess(){
+            function submitSuccess(){
+                $(bidRecord).text('');
                 elements = params.refreshElements();
                 renderBlogList();
                 $(overlay).click();

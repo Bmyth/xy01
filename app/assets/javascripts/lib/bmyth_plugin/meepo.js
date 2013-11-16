@@ -268,8 +268,10 @@ $.fn.extend({
                 var elementSection = $(this).find("span").text();
                 if(elementSection === section){
                     if(($(this).hasClass("disappeared"))){
-                        var idx = $(this).attr('eleindex');
-                        params.elements[idx].render('.meepo-grand', subsection, param);
+                        if(section !== 'home'){
+                            var idx = $(this).attr('eleindex');
+                            params.elements[idx].render('.meepo-grand', subsection, param);
+                        }
                     }else{
                         transform(this);
                     }
