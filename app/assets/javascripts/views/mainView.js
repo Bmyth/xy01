@@ -1,10 +1,10 @@
 define(['backbone','text!template/mainView_template.html',
-        'views/blogView','views/timelineView','views/gridView','views/meView',
+        'views/blogView','views/nichijouView','views/blueprintView','views/meView',
         'lib/bmyth_plugin/meepo',
         'lib/bmyth_plugin/tristram'],
     function(
         Backbone, viewTemplate,
-        blogView, timelineView,gridView,meView,
+        blogView, nichijouView, blueprintView, meView,
         meepoPlug, tristramPlug){
     var MainView = Backbone.View.extend({
 
@@ -21,8 +21,8 @@ define(['backbone','text!template/mainView_template.html',
             var meepoParams = {size: 800, grandHeight: 640, elementSize : 185, elementMargin: 10, shelfOffset: 360,
                 elements:[
                     {title:blogView.title, desc:blogView.desc, frontColor: "#ffffff", backColor: blogView.basicColor, render: blogView.renderGrandElement},
-                    {title:timelineView.title, desc:timelineView.desc, frontColor: "#ffffff", backColor: timelineView.basicColor, render: timelineView.renderGrandElement},
-                    {title:gridView.title, desc:gridView.desc, frontColor: "#ffffff", backColor: gridView.basicColor, render: gridView.renderGrandElement},
+                    {title:nichijouView.title, desc:nichijouView.desc, frontColor: "#ffffff", backColor: nichijouView.basicColor, render: nichijouView.renderGrandElement},
+                    {title:blueprintView.title, desc:blueprintView.desc, frontColor: "#ffffff", backColor: blueprintView.basicColor, render: blueprintView.renderGrandElement},
                     {title:meView.title, desc:meView.desc, frontColor: "#ffffff", backColor: meView.basicColor, render:   meView.renderGrandElement}
                 ]
             };

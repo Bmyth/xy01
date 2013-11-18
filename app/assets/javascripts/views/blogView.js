@@ -24,7 +24,8 @@ define(
                 that.blogList.push({
                     title: blog.get('title'),
                     banner: blog.get('bannerCloudurl'),
-                    id: blog.get('id')
+                    id: blog.get('id'),
+                    createDate: blog.get('created_at')
                 });
             });
             return this.blogList;
@@ -50,6 +51,7 @@ define(
                     height: 600,
                     elementWidth: 800,
                     elementHeight: 185,
+                    backColor: "#FFC700",
                     submitBlog: Blogs.submitBlog,
                     readBlog: Blogs.readBlog,
                     deleteBlog: Blogs.deleteBlog,
@@ -68,7 +70,7 @@ define(
 
     var description = "blog";
 
-    var basicColor = "#FFE873";
+    var basicColor = "#FFC700";
 
     var view = new BlogView;
 

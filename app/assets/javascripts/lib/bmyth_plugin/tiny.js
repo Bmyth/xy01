@@ -20,18 +20,21 @@ $.fn.extend({
         var elementTemplate = "<div class='tiny-element'>" +
                                 "<img class='thumbnail'>" +
                                 "<div class='desc'>" +
-                                    "<p></p>" +
+                                    "<p class='title'></p>" +
+                                    "<p class='date'></p>" +
+                                    "<p class='summary'></p>" +
                                 "</div>" +
                               "</div>";
         var optTemplate = "<div class='tiny-opt'></div>";
-        var createTemplate = "<span class='create opt-item'>create</span>";
-        var submitTemplate = "<span class='submit opt-item'>submit</span>";
-        var editTemplate = "<span class='edit opt-item'>edit</span>";
-        var deleteTemplate = "<span class='delete opt-item'>delete</span>";
-        var backTemplate = "<span class='back opt-item'>back</span>";
+        var createTemplate = "<span class='create opt-item footer-element'>create</span>";
+        var submitTemplate = "<span class='submit opt-item footer-element'>submit</span>";
+        var editTemplate = "<span class='edit opt-item footer-element'>edit</span>";
+        var deleteTemplate = "<span class='delete opt-item footer-element'>delete</span>";
+        var backTemplate = "<span class='back opt-item footer-element'>back</span>";
 
-        var blogContentTemplate =  "<div class='blog-content'>" +
-                                        "<p class='blog-title'></p>" +
+        var blogContentTemplate =  "<div class='blog-content-container'>" +
+                                        "<p class='blog-title'>" +
+                                        "</p>" +
                                         "<div class='blog-content'></div>" +
                                     "</div>";
         var bidRecordTemplate = "<p class='blog-id' style='display: none'></p>";
@@ -45,7 +48,7 @@ $.fn.extend({
                                 "<div class='banner-buffer' style='display: none'><input class='banner-input' type='file'><span class='img-url'></span></div>" +
                             "</div>" +
                         "</div>" +
-                        "<textarea name='content' style='width:796px;height:560px;'></textarea>" +
+                        "<textarea name='content' style='width:798px;height:560px;'></textarea>" +
                        "</form>";
         var bannerAjaxForm = "<form action='/api/imgCreate' method='post' style='display: none' class='temp-banner-form'>" +
                                 "<input id='img_imgSrc' name='img[imgSrc]' type='file'>" +
@@ -56,7 +59,8 @@ $.fn.extend({
         var listContainer = parent.find('.tiny-container .element-list').get(0) || $(gridContainerTemplate).prependTo(parent).find('.element-list').get(0);
         listContainer =  $(listContainer).css({width: width + elementMargin * 2, 'margin-left': -elementMargin});
         $(".tiny-container .list-container").css({height:height});
-        var detailContainer = $(".tiny-container .detail-container");
+        $(params.optPanel).css({backgroundColor:params.backColor});
+        var detailContainer = $(".tiny-container .detail-container").css({backgroundColor:params.backColor});
         var optPanel = $(params.optPanel).find('.tiny-opt').get(0) || $(optTemplate).appendTo(params.optPanel).get(0);
         var overlay = $('body').find('.tiny-overlay').get(0) || $(overlayTemplate).prependTo($('body')).get(0);
         var bidRecord = $(params.optPanel).find('.blog-id').get(0) || $(bidRecordTemplate).appendTo($(params.optPanel)).get(0);
@@ -105,7 +109,7 @@ $.fn.extend({
             if(blog){
                 var content = $(blogContentTemplate).appendTo($(".tiny-container .detail-container"));
                 content.find('.blog-title').text(blog.title);
-                $(".tiny-edit-form .ke-edit-iframe").contents().find("body").html(blog.content);
+                content.find(".blog-content").html(blog.content);
                 $(".tiny-container .detail-container").fadeIn();
                 $(overlay).show();
                 $(bidRecord).text(blog.id);
@@ -121,10 +125,12 @@ $.fn.extend({
             for(var i = 0 ; i < elements.length; i++){
                 var thumbnail = elements[i].banner || defaultThumbnail;
                 var desc = elements[i].title || "tiny element " + i;
+                var date = elements[i].createDate.substr(0,10) || "";
 
                 var ele = $(elementTemplate).css({width:elementWidth, height:elementHeight, margin:elementMargin}).attr('elementId', elements[i].id).appendTo(listContainer);
                 ele.find('.thumbnail').css({maxWidth:160, maxHeight:160}).attr('src', thumbnail);
-                ele.find('.desc p').text(desc);
+                ele.find('.desc p.title').text(desc);
+                ele.find('.desc p.date').text(date);
             }
         };
 
@@ -201,6 +207,14 @@ $.fn.extend({
             $.kael('regist',{status:'blogStatus', value:'list', activeEvent:setBlogListOpt, registHistory:'setBlogListOpt'},true);
             $.kael('regist',{status:'blogStatus', value:'create', activeEvent:setBlogCreateOpt, registHistory:'setBlogCreateOpt'},true);
             $.kael('regist',{status:'blogStatus', value:'show', activeEvent:setBlogShowOpt, registHistory:'setBlogShowOpt'},true);
+
+            function getBannerUrl(){
+                var imgUrl = $(".tiny-edit-panel .banner img").attr('src');
+                if(imgUrl === 'assets/tiny/add_banner.png'){
+                    return 'assets/tiny/default_banner.jpg';
+                }
+                return imgUrl;
+            };
 
             function submitSuccess(){
                 $(bidRecord).text('');

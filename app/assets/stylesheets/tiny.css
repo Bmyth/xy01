@@ -24,17 +24,23 @@
     border: 1px solid #ccc;
 }
 .tiny-container .tiny-element .desc{
-   background-color: #666;
    color: #fff;
-   padding: 5px 0;
    font-weight: bold;
    width: 100%;
    margin-top: 25px;
 }
-.tiny-container .tiny-element .desc p{
+.tiny-container .tiny-element .desc .title{
     text-align: right;
-    margin-right: 15px;
-    font-size: 18px;
+    padding: 5px 15px;
+    font-size: 20px;
+    background-color: #666;
+    color: #fff;
+}
+.tiny-container .tiny-element .desc .date{
+    color: #000;
+    text-align: right;
+    padding: 10px 15px;
+    font-weight: lighter;
 }
 .tiny-overlay{
     width: 100%;
@@ -58,14 +64,15 @@
     display: none;
 }
 .tiny-edit-panel{
-    height: 40px;
     overflow: hidden;
+    margin: 10px;
 }
 .tiny-edit-panel .title{
     height: 25px;
-    width: 360px;
+    width: 400px;
     float: left;
     margin-right: 18px;
+    text-align: center;
 }
 .tiny-edit-panel .banner{
     height: 32px;
@@ -98,13 +105,43 @@
     color: #aaa;
 }
 .tiny-opt{
-    height: 20px;
+    height: 40px;
     float: right;
     font-weight: bold;
     color: #fff;
+    padding-top: 10px;
+    margin-right: -5px;
+    border-left: 5px solid #fff;
 }
 .tiny-opt .opt-item{
-    width: 45px;
-    margin-right: 10px;
+    width: 40px;
     cursor: pointer;
+    text-align: center;
+    display: block;
+    float: left;
+    margin-top: -10px;
+}
+.tiny-container .blog-content-container .blog-title{
+    font-size: 24px;
+    margin: 10px 0 10px 10px;
+    color: #fff;
+    font-weight: bold;
+}
+.tiny-container .detail-container .blog-content{
+    height: 600px;
+    overflow-y: scroll;
+    padding: 10px 20px 0 10px;
+    background-color: #fff;
+}
+.tiny-container .detail-container .blog-content h4{
+    font-size: 18px;
+    margin: 6px 0;
+}
+.tiny-container .detail-container .blog-content p{
+    font-size: 14px;
+    line-height: 150%;
+}
+.tiny-container .detail-container .blog-content img{
+    max-width: 600px;
+    margin: 6px 0;
 }

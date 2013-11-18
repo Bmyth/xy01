@@ -4,3 +4,11 @@ refactor:
 2 status machine manage URL and login
 3 cut global js file
 4 separate js layers
+
+11.18
+before move on
+create a blog for website log
+adjust style
+db spike
+
+{"mysql-5.1":[{"name":"xy01-mysql-15883","label":"mysql-5.1","plan":"free","tags":["mysql","mysql-5.1","relational","mysql-5.1","mysql"],"credentials":{"name":"de844a8dc187941a49e5bcf2f9e6a6e50","hostname":"10.0.2.219","host":"10.0.2.219","port":3306,"user":"u4mpJWZmLhoSo","username":"u4mpJWZmLhoSo","password":"p1QfBe7w2RfRN"}}]}

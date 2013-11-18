@@ -11,31 +11,26 @@ body{position: relative;}
   position: relative;
 }
 
-.blog-content{
-  padding: 3px;
-  .blog-title{
-    font-size: 18px;
-    font-weight: bold;
-    color: #666;
-    margin-bottom: 5px;
-  }
-}
-
 .blog-footer{
-  background-color: #FFE873;
   width: 100%;
-  height: 20px;
-  margin-top: 20px;
+  height: 30px;
+  margin-top: 5px;
   overflow: hidden;
   position: relative;
   z-index: 8;
+  padding-bottom: 10px;
   p{
     float: left;
     color: #fff;
     font-size: 18px;
     font-weight: bold;
-    margin-left: 3px;
-    width: 120px;
+  }
+  .footer-element{
+    text-align: center;
+    width: 40px;
+    padding: 10px;
+    height: 30px;
+    border-right: 5px solid #fff;
   }
 }
 
@@ -44,8 +39,4 @@ body{position: relative;}
   top: 0;
   right: 0;
   z-index: 12;
-}
-
-.blog-form{
-  display: none;
 }

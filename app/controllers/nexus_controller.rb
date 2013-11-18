@@ -1,5 +1,6 @@
 class NexusController < ApplicationController
   def index
+    @envparam =  ENV['VCAP_SERVICES']
   end
 
   def blogsFetch

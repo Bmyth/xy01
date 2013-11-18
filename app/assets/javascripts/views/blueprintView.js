@@ -1,5 +1,5 @@
-define(['backbone', 'text!template/timelineView_template.html'],function(Backbone, viewTemplate){
-    var TimelineView = Backbone.View.extend({
+define(['backbone', 'text!template/blueprintView_template.html'],function(Backbone, viewTemplate){
+    var BlueprintView = Backbone.View.extend({
         subViewList : [],
         events: {
 
@@ -21,15 +21,15 @@ define(['backbone', 'text!template/timelineView_template.html'],function(Backbon
         }
     });
 
-    var view = new TimelineView;
+    var view = new BlueprintView;
 
-    var viewName = "timelineView";
+    var viewName = "blueprintView";
 
-    var title = "time line";
+    var title = "blueprint";
 
-    var description = "time line";
+    var description = "if you want to know more about this website";
 
-    var basicColor = "#5DCEC6";
+    var basicColor = "#D0006E";
 
     var initialize = function(){
         view.initialize();
@@ -46,7 +46,6 @@ define(['backbone', 'text!template/timelineView_template.html'],function(Backbon
     var renderGrandElement = function(container) {
         view.renderGrandElement(container)
     };
-
     return {
         initialize : initialize,
         viewName : viewName,

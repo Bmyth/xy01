@@ -62,7 +62,7 @@ $.fn.extend({
             renderShelf();
 
             var ghost = '<div class="ghost"></div>';
-            $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:homeBackColor, marginTop: elementMargin, marginBottom: elementMargin}).addClass("disappeared");
+            $('.meepo-shelf .main-view-element').css({color:homeFrontColor, backgroundColor:"#437DD4", marginTop: elementMargin, marginBottom: elementMargin}).addClass("disappeared");
             $('.meepo-shelf .shelf-element:not(".main-view-element")').addClass('click-to-render').append($(ghost));
             $(".meepo-shelf .shelf-element .ghost").css("width", elementSize);
 

@@ -29,7 +29,7 @@ define(['backbone', 'text!template/meView_template.html'],function(Backbone, vie
 
     var description = "me";
 
-    var basicColor = "#A6100D";
+    var basicColor = "#666";
 
     var initialize = function(){
         view.initialize();

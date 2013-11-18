@@ -1,5 +1,5 @@
-define(['backbone', 'text!template/gridView_template.html'],function(Backbone, viewTemplate){
-    var GridView = Backbone.View.extend({
+define(['backbone', 'text!template/nichijou_template.html'],function(Backbone, viewTemplate){
+    var NichijouView = Backbone.View.extend({
         subViewList : [],
         events: {
 
@@ -21,15 +21,15 @@ define(['backbone', 'text!template/gridView_template.html'],function(Backbone, v
         }
     });
 
-    var view = new GridView;
+    var view = new NichijouView;
 
-    var viewName = "gridView";
+    var viewName = "nichijouView";
 
-    var title = "grid";
+    var title = "nichijou";
 
-    var description = "grid";
+    var description = "my daily note and idea";
 
-    var basicColor = "#FF9540";
+    var basicColor = "#23BC47";
 
     var initialize = function(){
         view.initialize();
@@ -46,6 +46,7 @@ define(['backbone', 'text!template/gridView_template.html'],function(Backbone, v
     var renderGrandElement = function(container) {
         view.renderGrandElement(container)
     };
+
     return {
         initialize : initialize,
         viewName : viewName,

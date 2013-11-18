@@ -5,8 +5,8 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
 //            'blog/create' : blogCreate,
 //            'blog/edit' : blogEdit,
             'blog/:id' :blogShow,
-            'timeline' : timeLine,
-            'grid' : grid,
+            'nichijou' : nichijou,
+            'blueprint' : blueprint,
             'me' : me,
             '*actions' : index
         }
@@ -17,8 +17,8 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
 
         $.kael('regist',{status:'mainStatus', value:'home', activeEvent:setHomeRoute, registHistory:'setHomeRoute'},true);
         $.kael('regist',{status:'mainStatus', value:'blog', activeEvent:setBlogRoute, registHistory:'setBlogRoute'},true);
-        $.kael('regist',{status:'mainStatus', value:'time line', activeEvent:setTimelineRoute, registHistory:'setTimelineRoute'},true);
-        $.kael('regist',{status:'mainStatus', value:'grid', activeEvent:setGridRoute, registHistory:'setGridRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'nichijou', activeEvent:setNichijouRoute, registHistory:'setNichijouRoute'},true);
+        $.kael('regist',{status:'mainStatus', value:'blueprint', activeEvent:setBlueprintRoute, registHistory:'setBlueprintRoute'},true);
         $.kael('regist',{status:'mainStatus', value:'me', activeEvent:setMeRoute, registHistory:'setMeRoute'},true);
 
         $.kael('regist',{status:'blogStatus', value:'list', activeEvent:setBlogListRoute, registHistory:'setBlogListRoute'},true);
@@ -58,14 +58,14 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
         MainView.render($('.container'),'blog', 'show', id);
     };
 
-    function timeLine(){
-        $.kael('set', {status:'mainStatus', value:'time line', active: true, static: true}, true);
-        MainView.render($('.container'),'time line');
+    function nichijou(){
+        $.kael('set', {status:'mainStatus', value:'nichijou', active: true, static: true}, true);
+        MainView.render($('.container'),'nichijou');
     };
 
-    function grid(){
-        $.kael('set', {status:'mainStatus', value:'grid', active: true, static: true}, true);
-        MainView.render($('.container'),'grid');
+    function blueprint(){
+        $.kael('set', {status:'mainStatus', value:'blueprint', active: true, static: true}, true);
+        MainView.render($('.container'),'blueprint');
     };
 
     function me(){
@@ -83,14 +83,14 @@ define(['backbone', 'views/mainView'],function(Backbone, MainView){
         blog();
     }
 
-    function setTimelineRoute(){
-        history.pushState(null, 'time line', '#time line');
-        timeLine();
+    function setNichijouRoute(){
+        history.pushState(null, 'nichijou', '#nichijou');
+        nichijou();
     }
 
-    function setGridRoute(){
-        history.pushState(null, 'grid', '#grid');
-        grid();
+    function setBlueprintRoute(){
+        history.pushState(null, 'blueprint', '#blueprint');
+        blueprint();
     }
 
     function setMeRoute(){
